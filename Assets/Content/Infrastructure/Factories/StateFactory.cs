@@ -1,7 +1,7 @@
 ﻿using Content.Infrastructure.States.Interfaces;
 using Zenject;
 
-namespace Content.Infrastructure.States
+namespace Content.Infrastructure.Factories
 {
     public class StateFactory
     {

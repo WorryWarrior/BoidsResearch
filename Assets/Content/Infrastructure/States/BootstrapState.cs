@@ -1,4 +1,5 @@
 ﻿using Content.Infrastructure.SceneManagement;
+using Content.Infrastructure.Services.StaticData;
 using Content.Infrastructure.States.Interfaces;
 
 namespace Content.Infrastructure.States
@@ -7,20 +8,20 @@ namespace Content.Infrastructure.States
     {
         private readonly GameStateMachine _stateMachine;
         private readonly ISceneLoader _sceneLoader;
+        private readonly IStaticDataService _staticDataService;
         
         public BootstrapState(
             GameStateMachine gameStateMachine,
-            ISceneLoader sceneLoader)
+            IStaticDataService staticDataService)
         {
             _stateMachine = gameStateMachine;
-            _sceneLoader = sceneLoader;
+            _staticDataService = staticDataService;
         }
         
-        public async void Enter()
+        public void Enter()
         {
-            await _sceneLoader.LoadScene(SceneName.Boot);
-            
-            _stateMachine.Enter<LoadProgressState>();
+            _staticDataService.Initialized += () =>
+                _stateMachine.Enter<LoadProgressState>();
         }
         
         public void Exit()

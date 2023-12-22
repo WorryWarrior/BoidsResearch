@@ -8,7 +8,7 @@ using Mitfart.LeoECSLite.UnityIntegration.Editor.Extensions;
 using Mitfart.LeoECSLite.UnityIntegration.Editor.Extensions.Style;
 using Mitfart.LeoECSLite.UnityIntegration.PackedEntity;
 using Mitfart.LeoECSLite.UnityIntegration.View;
-using Unity.VisualScripting;
+// Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -37,11 +37,11 @@ namespace Mitfart.LeoECSLite.UnityIntegration.Editor {
 
     public override VisualElement CreatePropertyGUI(SerializedProperty property) {
       _property = property;
-      _target   = (ComponentView) property.GetUnderlyingValue();
+      /*_target   = (ComponentView) property.GetUnderlyingValue();
 
       CreateElements();
       StructureElements();
-      InitElements();
+      InitElements();*/
       return _root;
     }
 
@@ -80,7 +80,7 @@ namespace Mitfart.LeoECSLite.UnityIntegration.Editor {
 
 
     private void AddPackedEntities() {
-      if (!ComponentsWithPackedEntities.Contains(ComponentType))
+      /*if (!ComponentsWithPackedEntities.Contains(ComponentType))
         return;
 
       foreach (FieldInfo field in ComponentType.GetFields()) {
@@ -156,7 +156,7 @@ namespace Mitfart.LeoECSLite.UnityIntegration.Editor {
             _main.Add(entitiesContainer);
             break;
         }
-      }
+      }*/
     }
 
 
