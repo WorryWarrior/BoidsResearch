@@ -10,7 +10,6 @@ namespace Content.Infrastructure.Services.SaveLoad
     {
         private const string PlayerStateKey = "PlayerState";
         private const string BoidsSettingsKey = "BoidsSettings";
-        private const string BoidsStateKey = "BoidsState";
         
         private readonly IPersistentDataService _persistentDataService;
 
@@ -33,22 +32,14 @@ namespace Content.Infrastructure.Services.SaveLoad
 
         public void SaveBoidsSettings()
         {
-            throw new System.NotImplementedException();
+            string boidSettingsJson = SerializeObject(_persistentDataService.BoidsSettings);
+            PlayerPrefs.SetString(BoidsSettingsKey, boidSettingsJson);
         }
 
         public Task<BoidsSettingsData> LoadBoidsSettings()
         {
-            throw new System.NotImplementedException();
-        }
-
-        public void SaveBoidsState()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Task<BoidsStateData> LoadBoidsState()
-        {
-            throw new System.NotImplementedException();
+            BoidsSettingsData boidSettings = DeserializeObject<BoidsSettingsData>(PlayerPrefs.GetString(BoidsSettingsKey));
+            return Task.FromResult(boidSettings);
         }
     }
 }

@@ -40,8 +40,7 @@ namespace Content.Hub.Menu
         {
             startStageButton.onClick.AddListener(() =>
             {
-                Debug.Log("LOADING STAGE " + SelectedStage.StageKey);
-                //_stateMachine.Enter<LoadLevelState, StageStaticData>(SelectedStage);
+                _stateMachine.Enter<LoadLevelState, StageStaticData>(SelectedStage);
             });
         }
         

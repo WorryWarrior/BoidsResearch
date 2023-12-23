@@ -4,8 +4,6 @@
     {
         Boot,
         Meta,
-        CoreEntitas,
-        CoreLeoEcs,
-        CoreNaive
+        Core,
     }
 }

@@ -28,7 +28,7 @@ namespace Content.Infrastructure.States
                 [typeof(BootstrapState)]    = _stateFactory.CreateState<BootstrapState>(),
                 [typeof(LoadProgressState)]    = _stateFactory.CreateState<LoadProgressState>(),
                 [typeof(LoadMetaState)]    = _stateFactory.CreateState<LoadMetaState>(),
-                
+                [typeof(LoadLevelState)]    = _stateFactory.CreateState<LoadLevelState>(),
                 
                 
                 [typeof(TestState)]    = _stateFactory.CreateState<TestState>(),
@@ -37,13 +37,11 @@ namespace Content.Infrastructure.States
             Enter<BootstrapState>();
         }
         
-        public void Enter<TState>() where TState : class, IState =>
-            ChangeState<TState>()
-                .Enter();
+        public void Enter<TState>() where TState : class, IState => 
+            ChangeState<TState>().Enter();
 
         public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadedState<TPayload> =>
-            ChangeState<TState>()
-                .Enter(payload);
+            ChangeState<TState>().Enter(payload);
 
 
         private TState GetState<TState>() where TState : class, IExitableState => 
@@ -53,7 +51,7 @@ namespace Content.Infrastructure.States
         {
             _currentState?.Exit();
 
-            var state = GetState<TState>();
+            TState state = GetState<TState>();
             _currentState = state;
             
             _logger.LogMessage($"State changed to {_currentState.GetType().Name}", this);

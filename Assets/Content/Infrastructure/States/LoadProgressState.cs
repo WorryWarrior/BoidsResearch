@@ -9,16 +9,16 @@ namespace Content.Infrastructure.States
     public class LoadProgressState : IState
     {
         private readonly GameStateMachine _stateMachine;
-        private readonly IPersistentDataService _progressService;
+        private readonly IPersistentDataService _persistentDataService;
         private readonly ISaveLoadService _saveLoadService;
 
         public LoadProgressState(
             GameStateMachine stateMachine,
-            IPersistentDataService progressService,
+            IPersistentDataService persistentDataService,
             ISaveLoadService saveLoadService)
         {
             _stateMachine = stateMachine;
-            _progressService = progressService;
+            _persistentDataService = persistentDataService;
             _saveLoadService = saveLoadService;
         }
         
@@ -36,13 +36,35 @@ namespace Content.Infrastructure.States
 
         private async void LoadProgressOrCreateNew()
         {
-            _progressService.PlayerState = await _saveLoadService.LoadPlayerState() ?? CreateNewPlayerState();
+            _persistentDataService.BoidsSettings = await _saveLoadService.LoadBoidsSettings() 
+                                                   ?? CreateNewBoidSettings();
+            _persistentDataService.PlayerState = await _saveLoadService.LoadPlayerState() 
+                                                 ?? CreateNewPlayerState();
         }
 
         private PlayerStateData CreateNewPlayerState() => 
             new()
             {
                 PlayerPosition = Vector3.zero
+            };
+
+        private BoidsSettingsData CreateNewBoidSettings() =>
+            new()
+            {
+                BoidCount = 1000,
+                SpawnRadius = 40f,
+                MinSpeed = 10f,
+                MaxSpeed = 12f,
+                PerceptionRadius = 2.5f,
+                AvoidanceRadius = 3f,
+                MaxSteerForce = 7.5f,
+                AlignmentWeight = 5,
+                CohesionWeight = .75f,
+                SeparationWeight = 2f,
+                TargetWeight = .75f,
+                BoundsRadius = 1f,
+                AvoidCollisionWeight = 20f,
+                CollisionAvoidDistance = 5
             };
     }
 }

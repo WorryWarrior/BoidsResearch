@@ -10,6 +10,7 @@ namespace Content.Infrastructure.Installers
             Container.Bind<BootstrapState>().AsSingle().NonLazy();
             Container.Bind<LoadProgressState>().AsSingle().NonLazy();
             Container.Bind<LoadMetaState>().AsSingle().NonLazy();
+            Container.Bind<LoadLevelState>().AsSingle().NonLazy();
             
             
             Container.Bind<TestState>().AsSingle().NonLazy();

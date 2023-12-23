@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 public class CinemachineTargetController : MonoBehaviour
 {
-    [Header("Game Data")]
     [SerializeField] private float movementSpeed = 1f;
     
     [Header("Cinemachine Data")]

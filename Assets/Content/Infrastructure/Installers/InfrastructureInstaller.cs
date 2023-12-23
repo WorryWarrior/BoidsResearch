@@ -38,7 +38,10 @@ namespace Content.Infrastructure.Installers
         private void RegisterFactories()
         {
             Container.BindInterfacesAndSelfTo<StateFactory>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EntitasSystemFactory>().AsSingle();
+            
             Container.Bind<IUIFactory>().To<UIFactory>().AsSingle();
+            Container.Bind<IStageFactory>().To<StageFactory>().AsSingle();
         }
     }
 }
