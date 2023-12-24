@@ -51,20 +51,20 @@ namespace Content.Infrastructure.States
         private BoidsSettingsData CreateNewBoidSettings() =>
             new()
             {
-                BoidCount = 1000,
+                BoidCount = 2250,
                 SpawnRadius = 40f,
                 MinSpeed = 10f,
                 MaxSpeed = 12f,
                 PerceptionRadius = 2.5f,
-                AvoidanceRadius = 3f,
+                AvoidanceRadius = 7.5f,
                 MaxSteerForce = 7.5f,
                 AlignmentWeight = 5,
-                CohesionWeight = .75f,
+                CohesionWeight = 1.25f,
                 SeparationWeight = 2f,
-                TargetWeight = .75f,
+                TargetWeight = 1.75f,
                 BoundsRadius = 1f,
-                AvoidCollisionWeight = 20f,
-                CollisionAvoidDistance = 5
+                CollisionAvoidanceWeight = 20f,
+                CollisionAvoidanceDistance = 5
             };
     }
 }

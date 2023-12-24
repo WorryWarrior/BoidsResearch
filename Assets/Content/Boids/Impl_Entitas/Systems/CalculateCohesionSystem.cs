@@ -1,3 +1,4 @@
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -7,20 +8,18 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateCohesionSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Velocity,
+            GameMatcher.FlockmateNumber,
+            GameMatcher.FlockCenter,
+            GameMatcher.Cohesion));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly BoidSettings _boidSettings;
-
-        public CalculateCohesionSystem(GameContext context, BoidSettings settings)
+        public CalculateCohesionSystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Velocity,
-                GameMatcher.FlockmateNumber,
-                GameMatcher.FlockCenter,
-                GameMatcher.Cohesion));
-
-            _boidSettings = settings;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -42,9 +41,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCohesionJob calculateCohesionJob = new()
             {
-                cohesionWeight = _boidSettings.cohesionWeight,
-                maxSpeed = _boidSettings.maxSpeed,
-                maxSteerForce = _boidSettings.maxSteerForce,
+                cohesionWeight = _persistentDataService.BoidsSettings.CohesionWeight,
+                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
                 boidPositions = _boidPositions,
                 boidVelocities = _boidVelocities,
                 boidFlockCenters = _boidFlockCenters,
@@ -60,7 +59,6 @@ namespace Content.Boids.Impl_Entitas.Systems
                 if (e.flockmateNumber.value == 0)
                 {
                     _cohesionValues[entityIndex] = float3.zero;
-                    ;
                 }
 
                 e.ReplaceCohesion(_cohesionValues[entityIndex]);

@@ -20,7 +20,7 @@ namespace Content.Data
         public float SeparationWeight { get; set; }
         public float TargetWeight { get; set; }
         public float BoundsRadius { get; set; }
-        public float AvoidCollisionWeight { get; set; }
-        public float CollisionAvoidDistance { get; set; }
+        public float CollisionAvoidanceWeight { get; set; }
+        public float CollisionAvoidanceDistance { get; set; }
     }
 }

@@ -25,7 +25,17 @@ MonoBehaviour:
     m_Address: PFB_EntitasSystemController
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: d5cbe8ef01eef00449690dfcf4d4d6b2
+    m_Address: PFB_NaiveSystemController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 24037eba69e2ea04a9f0a73a76b4084d
+    m_Address: PFB_LeoEcsSystemController
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 438ec45ee97105a44a9c9efb9546238a, type: 2}
   m_SchemaSet:
-    m_Schemas: []
+    m_Schemas:
+    - {fileID: 11400000, guid: 3b7993a5bdbcf5d479dfd840fbd8d438, type: 2}
+    - {fileID: 11400000, guid: 71188924849df6543b004f4fba84f5c0, type: 2}

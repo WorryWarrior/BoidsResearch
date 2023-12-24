@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -7,18 +8,16 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateAlignmentSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Velocity,
+            GameMatcher.AverageFlockDirection,
+            GameMatcher.Alignment));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly BoidSettings _boidSettings;
-
-        public CalculateAlignmentSystem(GameContext context, BoidSettings settings)
+        public CalculateAlignmentSystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Velocity,
-                GameMatcher.AverageFlockDirection,
-                GameMatcher.Alignment));
-
-            _boidSettings = settings;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -39,9 +38,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateAlignmentJob calculateAlignmentJob = new()
             {
-                alignmentWeight = _boidSettings.alignmentWeight,
-                maxSpeed = _boidSettings.maxSpeed,
-                maxSteerForce = _boidSettings.maxSteerForce,
+                alignmentWeight = _persistentDataService.BoidsSettings.AlignmentWeight,
+                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
                 boidVelocities = _boidVelocities,
                 boidFlockDirections = _boidAverageFlockDirections,
                 alignmentValues = _alignmentValues
@@ -56,7 +55,6 @@ namespace Content.Boids.Impl_Entitas.Systems
                 if (e.flockmateNumber.value == 0)
                 {
                     _alignmentValues[entityIndex] = float3.zero;
-                    ;
                 }
 
                 e.ReplaceAlignment(_alignmentValues[entityIndex]);

@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -7,18 +8,16 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateSeparationSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Velocity,
+            GameMatcher.AverageAvoidance,
+            GameMatcher.Separation));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly BoidSettings _boidSettings;
-
-        public CalculateSeparationSystem(GameContext context, BoidSettings settings)
+        public CalculateSeparationSystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Velocity,
-                GameMatcher.AverageAvoidance,
-                GameMatcher.Separation));
-
-            _boidSettings = settings;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -38,9 +37,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateSeparationJob calculateSeparationJob = new()
             {
-                separationWeight = _boidSettings.separationWeight,
-                maxSpeed = _boidSettings.maxSpeed,
-                maxSteerForce = _boidSettings.maxSteerForce,
+                separationWeight = _persistentDataService.BoidsSettings.SeparationWeight,
+                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
                 boidVelocities = _boidVelocities,
                 boidAverageAvoidances = _boidAverageAvoidances,
                 separationValues = _separationValues
@@ -55,7 +54,6 @@ namespace Content.Boids.Impl_Entitas.Systems
                 if (e.flockmateNumber.value == 0)
                 {
                     _separationValues[entityIndex] = float3.zero;
-                    ;
                 }
 
                 e.ReplaceSeparation(_separationValues[entityIndex]);

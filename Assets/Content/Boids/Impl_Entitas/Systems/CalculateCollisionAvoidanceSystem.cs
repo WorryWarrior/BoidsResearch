@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -9,32 +10,24 @@ namespace Content.Boids.Impl_Entitas.Systems
     {
         private const int AVOIDANCE_RAYCAST_DIRECTION_COUNT = 300;
 
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Rotation,
+            GameMatcher.Velocity,
+            GameMatcher.IsOnCollisionTrajectory,
+            GameMatcher.Avoidance));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly float _collisionAvoidanceWeight;
-        private readonly float _boundsRadius;
-        private readonly float _collisionAvoidanceDistance;
-        private readonly float _maxSpeed;
-        private readonly float _maxSteerForce;
+        private float3[] _avoidanceRaycastDirectionsArray;
 
-        private readonly float3[] _avoidanceRaycastDirectionsArray;
-
-        public CalculateCollisionAvoidanceSystem(GameContext context, BoidSettings settings)
-        {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Rotation,
-                GameMatcher.Velocity,
-                GameMatcher.IsOnCollisionTrajectory,
-                GameMatcher.Avoidance));
-
-            _collisionAvoidanceWeight = settings.avoidCollisionWeight;
-            _maxSpeed = settings.maxSpeed;
-            _maxSteerForce = settings.maxSteerForce;
-            _boundsRadius = settings.boundsRadius;
-            _collisionAvoidanceDistance = settings.collisionAvoidDst;
-            _avoidanceRaycastDirectionsArray =
+        private float3[] _AvoidanceRaycastDirectionsArray =>
+            _avoidanceRaycastDirectionsArray ??= 
                 BoidsMathUtility.GetAvoidanceRayDirections(AVOIDANCE_RAYCAST_DIRECTION_COUNT);
+
+        public CalculateCollisionAvoidanceSystem(
+            IPersistentDataService persistentDataService)
+        {
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -45,7 +38,7 @@ namespace Content.Boids.Impl_Entitas.Systems
             NativeArray<bool> _boidIsOnCollisionTrajectoryStatuses =
                 new NativeArray<bool>(_boidsGroup.count, Allocator.TempJob);
             NativeArray<float3> _collisionAvoidances = new NativeArray<float3>(_boidsGroup.count, Allocator.TempJob);
-            NativeArray<float3> _avoidanceRaycastDirections = new NativeArray<float3>(_avoidanceRaycastDirectionsArray,
+            NativeArray<float3> _avoidanceRaycastDirections = new NativeArray<float3>(_AvoidanceRaycastDirectionsArray,
                 Allocator.TempJob);
 
             int entityIndex = 0;
@@ -61,11 +54,11 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCollisionAvoidanceJob calculateCollisionAvoidanceJob = new()
             {
-                collisionAvoidanceWeight = _collisionAvoidanceWeight,
-                maxSpeed = _maxSpeed,
-                maxSteerForce = _maxSteerForce,
-                boundsRadius = _boundsRadius,
-                collisionAvoidanceDistance = _collisionAvoidanceDistance,
+                collisionAvoidanceWeight = _persistentDataService.BoidsSettings.CollisionAvoidanceWeight,
+                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
+                boundsRadius = _persistentDataService.BoidsSettings.BoundsRadius,
+                collisionAvoidanceDistance = _persistentDataService.BoidsSettings.CollisionAvoidanceDistance,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 boidVelocities = _boidVelocities,

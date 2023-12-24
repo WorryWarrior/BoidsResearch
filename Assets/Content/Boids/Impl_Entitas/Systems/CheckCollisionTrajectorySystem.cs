@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -7,19 +8,15 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CheckCollisionTrajectorySystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Rotation));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly float _boundsRadius;
-        private readonly float _collisionAvoidanceDistance;
-
-        public CheckCollisionTrajectorySystem(GameContext context, BoidSettings settings)
+        public CheckCollisionTrajectorySystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Rotation));
-
-            _boundsRadius = settings.boundsRadius;
-            _collisionAvoidanceDistance = settings.collisionAvoidDst;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -40,8 +37,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CheckCollisionTrajectoryJob checkCollisionTrajectoryJob = new()
             {
-                boundsRadius = _boundsRadius,
-                collisionAvoidanceDistance = _collisionAvoidanceDistance,
+                boundsRadius = _persistentDataService.BoidsSettings.BoundsRadius,
+                collisionAvoidanceDistance = _persistentDataService.BoidsSettings.CollisionAvoidanceDistance,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 collisionTrajectoryStatuses = _boidCollisionTrajectoryStatuses

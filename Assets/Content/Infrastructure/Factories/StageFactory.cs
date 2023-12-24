@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Content.Boids.Interfaces;
 using Content.Infrastructure.AssetManagement;
 using Content.Infrastructure.Factories.Interfaces;
 using Content.Infrastructure.Services.StaticData;
 using UnityEngine;
 using Zenject;
+using Object = UnityEngine.Object;
 
 namespace Content.Infrastructure.Factories
 {
@@ -13,7 +15,7 @@ namespace Content.Infrastructure.Factories
         private readonly DiContainer _container;
         private readonly IAssetProvider _assetProvider;
         private readonly IStaticDataService _staticDataService;
-
+        
         public StageFactory(
             DiContainer container, 
             IAssetProvider assetProvider, 
@@ -26,22 +28,27 @@ namespace Content.Infrastructure.Factories
         
         public async Task WarmUp()
         {
-            //await _assetProvider.Load<GameObject>(EntitasBoidsControllerId);
+            foreach (BoidsSimulationType boidsSimulationType in
+                     (BoidsSimulationType[])Enum.GetValues(typeof(BoidsSimulationType)))
+                await _assetProvider.Load<GameObject>(boidsSimulationType.ToSimulationControllerId());
+
         }
 
         public void CleanUp()
         {
-            //_assetProvider.Release(EntitasBoidsControllerId);
+            foreach (BoidsSimulationType boidsSimulationType in 
+                     (BoidsSimulationType[]) Enum.GetValues(typeof(BoidsSimulationType)))
+                 _assetProvider.Release(boidsSimulationType.ToSimulationControllerId());
         }
 
-        public async Task<IBoidsController> CreateBoidsController(BoidsControllerType boidsControllerType)
+        public async Task<IBoidsSimulationController> CreateBoidsController(BoidsSimulationType boidsSimulationType)
         {
-            GameObject prefab = await _assetProvider.Load<GameObject>("PFB_EntitasSystemController");
-            IBoidsController controller = Object.Instantiate(prefab).GetComponent<IBoidsController>();
+            GameObject prefab = await _assetProvider.Load<GameObject>(boidsSimulationType.ToSimulationControllerId());
+            IBoidsSimulationController simulationController = Object.Instantiate(prefab).GetComponent<IBoidsSimulationController>();
             
-            _container.Inject(controller);
+            _container.Inject(simulationController);
             
-            return controller;
+            return simulationController;
         }
     }
 }

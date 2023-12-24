@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -7,23 +8,19 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateFlockParametersSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
-
-        private readonly float _perceptionRadius;
-        private readonly float _avoidanceRadius;
-
-        public CalculateFlockParametersSystem(GameContext context, BoidSettings settings)
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Rotation,
+            GameMatcher.AverageFlockDirection,
+            GameMatcher.FlockmateNumber,
+            GameMatcher.FlockCenter,
+            GameMatcher.AverageAvoidance));
+        private readonly IPersistentDataService _persistentDataService;
+        
+        public CalculateFlockParametersSystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Rotation,
-                GameMatcher.AverageFlockDirection,
-                GameMatcher.FlockmateNumber,
-                GameMatcher.FlockCenter,
-                GameMatcher.AverageAvoidance));
-
-            _perceptionRadius = settings.perceptionRadius;
-            _avoidanceRadius = settings.avoidanceRadius;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -46,8 +43,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateFlockmateParameterJob flockmateParameterJob = new()
             {
-                perceptionRadius = _perceptionRadius,
-                avoidanceRadius = _avoidanceRadius,
+                perceptionRadius = _persistentDataService.BoidsSettings.PerceptionRadius,
+                avoidanceRadius = _persistentDataService.BoidsSettings.AvoidanceRadius,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 flockHeadings = _flockHeadings,

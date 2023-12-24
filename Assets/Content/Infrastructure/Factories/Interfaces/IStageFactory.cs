@@ -7,6 +7,6 @@ namespace Content.Infrastructure.Factories.Interfaces
     {
         Task WarmUp();
         void CleanUp();
-        Task<IBoidsController> CreateBoidsController(BoidsControllerType boidsControllerType);
+        Task<IBoidsSimulationController> CreateBoidsController(BoidsSimulationType boidsSimulationType);
     }
 }

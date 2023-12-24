@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.AssetManagement;
+﻿using System;
+using Content.Infrastructure.Factories.Interfaces;
 using Entitas;
 using UnityEngine;
 
@@ -6,29 +7,25 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class InitializeBoidGameObjectsSystem : IInitializeSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
-
-        private IAssetProvider _assetProvider;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.LinkedGO));
+        private readonly IBoidFactory _boidFactory;
         
         public InitializeBoidGameObjectsSystem(
-            IAssetProvider assetProvider
-            /*GameContext context*/)
+            IBoidFactory boidFactory)
         {
-            _assetProvider = assetProvider;
-            
-            _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
-                GameMatcher.LinkedGO));
+            _boidFactory = boidFactory;
         }
-        // BOID FACTORY 
+        
         public async void Initialize()
         {
             GameObject parentGO = new GameObject("Boid_LinkedGO_Parent");
-            GameObject prefab = await _assetProvider.Load<GameObject>("PFB_Boid");
             int k = 0;
             
             foreach (GameEntity e in _boidsGroup)
             {
-                GameObject linkedGO = Object.Instantiate(prefab, parentGO.transform, true);
+                GameObject linkedGO = await _boidFactory.Create(Vector3.zero);
+                linkedGO.transform.parent = parentGO.transform;
                 linkedGO.name = $"Linked_GO_{k}";
 
                 e.ReplaceLinkedGO(linkedGO);

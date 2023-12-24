@@ -7,14 +7,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class UpdateRotationSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
-
-        public UpdateRotationSystem(GameContext context)
-        {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Rotation,
-                GameMatcher.Velocity));
-        }
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Rotation,
+            GameMatcher.Velocity));
 
         public void Execute()
         {

@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -7,19 +8,17 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateTargetOffsetSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Velocity,
+            GameMatcher.FollowingTarget,
+            GameMatcher.TargetOffset));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly BoidSettings _boidSettings;
-
-        public CalculateTargetOffsetSystem(GameContext context, BoidSettings settings)
+        public CalculateTargetOffsetSystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Velocity,
-                GameMatcher.FollowingTarget,
-                GameMatcher.TargetOffset));
-
-            _boidSettings = settings;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -41,9 +40,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateTargetOffsetJob targetOffsetJob = new()
             {
-                targetWeight = _boidSettings.targetWeight,
-                maxSpeed = _boidSettings.maxSpeed,
-                maxSteerForce = _boidSettings.maxSteerForce,
+                targetWeight = _persistentDataService.BoidsSettings.TargetWeight,
+                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
                 boidPositions = _boidPositions,
                 boidTargetPositions = _boidTargetPositions,
                 boidVelocities = _boidVelocities,

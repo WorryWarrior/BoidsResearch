@@ -9,28 +9,10 @@ namespace Content.Boids.Impl_Entitas.Systems
         private readonly GameContext _context;
         private readonly IPersistentDataService _persistentDataService;
         
-        /*private readonly int _boidCount;
-        private readonly float _spawnRadius;
-        private readonly float _minSpeed;
-        private readonly float _maxSpeed;*/
-
         public InitializeBoidsSystem(
-            /*GameContext context, 
-            BoidSettings settings */
             IPersistentDataService persistentDataService)
         {
             _persistentDataService = persistentDataService;
-            //_context = context;
-
-            /*_boidCount = settings.boidCount;
-            _spawnRadius = settings.spawnRadius;
-            _minSpeed = settings.minSpeed;
-            _maxSpeed = settings.maxSpeed;*/
-
-            /*_boidCount = persistentDataService.BoidsSettings.BoidCount;
-            _spawnRadius = persistentDataService.BoidsSettings.SpawnRadius;
-            _minSpeed = persistentDataService.BoidsSettings.MinSpeed;
-            _maxSpeed = persistentDataService.BoidsSettings.MaxSpeed;*/
         }
 
         public void Initialize()

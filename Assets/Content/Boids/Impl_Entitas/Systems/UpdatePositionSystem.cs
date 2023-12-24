@@ -5,14 +5,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class UpdatePositionSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
-
-        public UpdatePositionSystem(GameContext context)
-        {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Position,
-                GameMatcher.Velocity));
-        }
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Position,
+            GameMatcher.Velocity));
 
         public void Execute()
         {

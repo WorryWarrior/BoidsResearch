@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Infrastructure.Services.PersistentData;
+using Entitas;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -6,19 +7,15 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateVelocitySystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Velocity,
+            GameMatcher.Acceleration));
+        private readonly IPersistentDataService _persistentDataService;
 
-        private readonly float _minSpeed;
-        private readonly float _maxSpeed;
-
-        public CalculateVelocitySystem(GameContext context, BoidSettings settings)
+        public CalculateVelocitySystem(
+            IPersistentDataService persistentDataService)
         {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Velocity,
-                GameMatcher.Acceleration));
-
-            _minSpeed = settings.minSpeed;
-            _maxSpeed = settings.maxSpeed;
+            _persistentDataService = persistentDataService;
         }
 
         public void Execute()
@@ -30,7 +27,8 @@ namespace Content.Boids.Impl_Entitas.Systems
                 float3 velocity = e.velocity.value;
                 float speed = math.length(velocity);
                 float3 dir = velocity / speed;
-                speed = math.clamp(speed, _minSpeed, _maxSpeed);
+                speed = math.clamp(speed, _persistentDataService.BoidsSettings.MinSpeed, 
+                    _persistentDataService.BoidsSettings.MaxSpeed);
 
                 e.velocity.value = dir * speed;
             }

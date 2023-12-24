@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Boids.Interfaces;
 using Content.StaticData;
 
 namespace Content.Infrastructure.Services.StaticData
@@ -38,19 +39,22 @@ namespace Content.Infrastructure.Services.StaticData
                 {
                     StageKey = "Stage_BoidsEntitas",
                     StageDescription = "Entitas Implementation",
-                    StageTitle = "Entitas"
+                    StageTitle = "Entitas",
+                    BoidsSimulationType = BoidsSimulationType.Entitas,
                 },
                 new StageStaticData
                 {
                     StageKey = "Stage_BoidsLeoEcs",
                     StageDescription = "LeoEcs Implementation",
-                    StageTitle = "LeoEcs"
+                    StageTitle = "LeoEcs",
+                    BoidsSimulationType = BoidsSimulationType.LeoEcs,
                 },
                 new StageStaticData
                 {
                     StageKey = "Stage_BoidsNaive",
                     StageDescription = "Naive Implementation",
-                    StageTitle = "Naive"
+                    StageTitle = "Naive",
+                    BoidsSimulationType = BoidsSimulationType.Naive,
                 }
             };
         }

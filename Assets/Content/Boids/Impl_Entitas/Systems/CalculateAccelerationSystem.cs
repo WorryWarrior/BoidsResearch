@@ -7,18 +7,13 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class CalculateAccelerationSystem : IExecuteSystem
     {
-        private readonly IGroup<GameEntity> _boidsGroup;
-
-        public CalculateAccelerationSystem(GameContext context)
-        {
-            _boidsGroup = context.GetGroup(GameMatcher.AllOf(
-                GameMatcher.Acceleration,
-                GameMatcher.TargetOffset,
-                GameMatcher.Cohesion,
-                GameMatcher.Separation,
-                GameMatcher.Alignment,
-                GameMatcher.Avoidance));
-        }
+        private readonly IGroup<GameEntity> _boidsGroup = Contexts.sharedInstance.game.GetGroup(GameMatcher.AllOf(
+            GameMatcher.Acceleration,
+            GameMatcher.TargetOffset,
+            GameMatcher.Cohesion,
+            GameMatcher.Separation,
+            GameMatcher.Alignment,
+            GameMatcher.Avoidance));
 
         public void Execute()
         {

@@ -310,29 +310,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 921525334}
-  - component: {fileID: 921525333}
   - component: {fileID: 921525335}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: NaiveSimulationController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &921525333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921525332}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad3ed62d1f35cb449cc3c653ff087f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefab: {fileID: 669367016906599218, guid: 0e0230d98dcc3fb4f8bde7390e2e67af, type: 3}
-  boidSettings: {fileID: 11400000, guid: 1be5578ff791c3648b744bd2ed831e13, type: 2}
 --- !u!4 &921525334
 Transform:
   m_ObjectHideFlags: 0
@@ -360,9 +345,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a9cb57121384f4b90a5aede3ee6780, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  settings: {fileID: 11400000, guid: 1be5578ff791c3648b744bd2ed831e13, type: 2}
-  boidTarget: {fileID: 1211538244}
-  compute: {fileID: 7200000, guid: 141fd9411e35db54e82172e97d88b7e7, type: 3}
 --- !u!1 &1211538243
 GameObject:
   m_ObjectHideFlags: 0
