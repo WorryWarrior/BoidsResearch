@@ -8,7 +8,7 @@ namespace Content.Infrastructure.Factories
     public class BoidFactory : IBoidFactory
     {
         private const string BoidPrefabId = "PFB_Boid";
-
+        
         private readonly IAssetProvider _assetProvider;
         
         public BoidFactory(

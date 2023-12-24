@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "EnableLookAround",
+                    "name": "ToggleLookAround",
                     "type": "Button",
                     "id": "6364b5a1-2f2f-409a-ba98-57dd0a7d262b",
                     "expectedControlType": "Button",
@@ -63,7 +63,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "EnableLookAround",
+                    "action": "ToggleLookAround",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

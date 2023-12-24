@@ -5,6 +5,7 @@ using Content.Infrastructure.SceneManagement;
 using Content.Infrastructure.Services.Logging;
 using Content.Infrastructure.States.Interfaces;
 using Content.StaticData;
+using UnityEngine;
 
 namespace Content.Infrastructure.States
 {
@@ -15,6 +16,7 @@ namespace Content.Infrastructure.States
         private readonly IUIFactory _uiFactory;
         private readonly IStageFactory _stageFactory;
         private readonly IBoidFactory _boidFactory;
+        private readonly ICameraFactory _cameraFactory;
         private readonly ILoggingService _loggingService;
         
         private StageStaticData _currentStageStaticData;
@@ -25,6 +27,7 @@ namespace Content.Infrastructure.States
             IUIFactory uiFactory,
             IStageFactory stageFactory,
             IBoidFactory boidFactory,
+            ICameraFactory cameraFactory,
             ILoggingService loggingService)
         {
             _stateMachine = gameStateMachine;
@@ -32,6 +35,7 @@ namespace Content.Infrastructure.States
             _uiFactory = uiFactory;
             _stageFactory = stageFactory;
             _boidFactory = boidFactory;
+            _cameraFactory = cameraFactory;
             _loggingService = loggingService;
         }
         
@@ -41,6 +45,7 @@ namespace Content.Infrastructure.States
             
             await _stageFactory.WarmUp();
             await _boidFactory.WarmUp();
+            await _cameraFactory.WarmUp();
             
             await _sceneLoader.LoadScene(SceneName.Core, OnSceneLoaded);
         }
@@ -49,6 +54,7 @@ namespace Content.Infrastructure.States
         {
             _stageFactory.CleanUp();
             _boidFactory.CleanUp();
+            _cameraFactory.CleanUp();
         }
 
         private async void OnSceneLoaded(SceneName sceneName)
@@ -59,6 +65,7 @@ namespace Content.Infrastructure.States
         private async Task InitGameWorld()
         {
             await InitBoidController();
+            await InitCameraActor();
         }
 
         private async Task InitBoidController()
@@ -66,9 +73,14 @@ namespace Content.Infrastructure.States
             IBoidsSimulationController boidsSimulationController = 
                 await _stageFactory.CreateBoidsController(_currentStageStaticData.BoidsSimulationType);
             
-            // Show loading curtain until boid simulation has finished initialization
-            boidsSimulationController.Initialized += () => _loggingService.LogMessage("Boid Simulation Ready", this);
+            boidsSimulationController.Initialized += () => 
+                _loggingService.LogMessage("Boid Simulation Ready", this);
             boidsSimulationController.InitializeBoids();
+        }
+
+        private async Task InitCameraActor()
+        {
+            await _cameraFactory.CreateCameraActor(_currentStageStaticData.CameraSpawnPoint);
         }
     }
 }

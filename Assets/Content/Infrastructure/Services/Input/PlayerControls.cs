@@ -37,7 +37,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
-                    ""name"": ""EnableLookAround"",
+                    ""name"": ""ToggleLookAround"",
                     ""type"": ""Button"",
                     ""id"": ""6364b5a1-2f2f-409a-ba98-57dd0a7d262b"",
                     ""expectedControlType"": ""Button"",
@@ -85,7 +85,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""EnableLookAround"",
+                    ""action"": ""ToggleLookAround"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -158,7 +158,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_EnableLookAround = m_Player.FindAction("EnableLookAround", throwIfNotFound: true);
+        m_Player_ToggleLookAround = m_Player.FindAction("ToggleLookAround", throwIfNotFound: true);
         m_Player_LookAround = m_Player.FindAction("LookAround", throwIfNotFound: true);
     }
 
@@ -222,14 +222,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_EnableLookAround;
+    private readonly InputAction m_Player_ToggleLookAround;
     private readonly InputAction m_Player_LookAround;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
         public PlayerActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @EnableLookAround => m_Wrapper.m_Player_EnableLookAround;
+        public InputAction @ToggleLookAround => m_Wrapper.m_Player_ToggleLookAround;
         public InputAction @LookAround => m_Wrapper.m_Player_LookAround;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -243,9 +243,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started += instance.OnMove;
             @Move.performed += instance.OnMove;
             @Move.canceled += instance.OnMove;
-            @EnableLookAround.started += instance.OnEnableLookAround;
-            @EnableLookAround.performed += instance.OnEnableLookAround;
-            @EnableLookAround.canceled += instance.OnEnableLookAround;
+            @ToggleLookAround.started += instance.OnToggleLookAround;
+            @ToggleLookAround.performed += instance.OnToggleLookAround;
+            @ToggleLookAround.canceled += instance.OnToggleLookAround;
             @LookAround.started += instance.OnLookAround;
             @LookAround.performed += instance.OnLookAround;
             @LookAround.canceled += instance.OnLookAround;
@@ -256,9 +256,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Move.started -= instance.OnMove;
             @Move.performed -= instance.OnMove;
             @Move.canceled -= instance.OnMove;
-            @EnableLookAround.started -= instance.OnEnableLookAround;
-            @EnableLookAround.performed -= instance.OnEnableLookAround;
-            @EnableLookAround.canceled -= instance.OnEnableLookAround;
+            @ToggleLookAround.started -= instance.OnToggleLookAround;
+            @ToggleLookAround.performed -= instance.OnToggleLookAround;
+            @ToggleLookAround.canceled -= instance.OnToggleLookAround;
             @LookAround.started -= instance.OnLookAround;
             @LookAround.performed -= instance.OnLookAround;
             @LookAround.canceled -= instance.OnLookAround;
@@ -327,7 +327,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);
-        void OnEnableLookAround(InputAction.CallbackContext context);
+        void OnToggleLookAround(InputAction.CallbackContext context);
         void OnLookAround(InputAction.CallbackContext context);
     }
 }

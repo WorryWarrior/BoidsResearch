@@ -9,7 +9,8 @@ namespace Content.Infrastructure.Services.Input
         private readonly ILoggingService _loggingService;
         
         public float MoveValue { get; private set; }
-        
+        public bool LookEnabledValue { get; private set; }
+
         public InputService(ILoggingService loggingService)
         {
             _loggingService = loggingService;
@@ -18,17 +19,23 @@ namespace Content.Infrastructure.Services.Input
             _playerControls.Enable();
             SubscribeControls();
         }
-
+        
         private void SubscribeControls()
         {
             _playerControls.Player.Move.performed += OnMove;
             _playerControls.Player.Move.canceled += OnMove;
+            _playerControls.Player.ToggleLookAround.performed += OnLookAroundToggled;
+            _playerControls.Player.ToggleLookAround.canceled += OnLookAroundToggled;
         }
-
+        
         private void OnMove(InputAction.CallbackContext context)
         {
             MoveValue = context.ReadValue<float>();
-            //_loggingService.LogMessage($"Move Value changed to: {MoveValue}", this);
+        }
+        
+        private void OnLookAroundToggled(InputAction.CallbackContext context)
+        {
+            LookEnabledValue = context.ReadValueAsButton();
         }
     }
 }

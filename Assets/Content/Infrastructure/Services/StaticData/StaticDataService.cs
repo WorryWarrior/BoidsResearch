@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Boids.Interfaces;
 using Content.StaticData;
+using UnityEngine;
 
 namespace Content.Infrastructure.Services.StaticData
 {
@@ -40,6 +41,7 @@ namespace Content.Infrastructure.Services.StaticData
                     StageKey = "Stage_BoidsEntitas",
                     StageDescription = "Entitas Implementation",
                     StageTitle = "Entitas",
+                    CameraSpawnPoint = new Vector3(25f, 0f, 10f),
                     BoidsSimulationType = BoidsSimulationType.Entitas,
                 },
                 new StageStaticData
@@ -47,6 +49,7 @@ namespace Content.Infrastructure.Services.StaticData
                     StageKey = "Stage_BoidsLeoEcs",
                     StageDescription = "LeoEcs Implementation",
                     StageTitle = "LeoEcs",
+                    CameraSpawnPoint = new Vector3(25f, 0f, 10f),
                     BoidsSimulationType = BoidsSimulationType.LeoEcs,
                 },
                 new StageStaticData
@@ -54,6 +57,7 @@ namespace Content.Infrastructure.Services.StaticData
                     StageKey = "Stage_BoidsNaive",
                     StageDescription = "Naive Implementation",
                     StageTitle = "Naive",
+                    CameraSpawnPoint = new Vector3(25f, 0f, 10f),
                     BoidsSimulationType = BoidsSimulationType.Naive,
                 }
             };

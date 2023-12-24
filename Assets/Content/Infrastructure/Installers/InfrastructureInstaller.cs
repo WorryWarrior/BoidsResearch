@@ -43,6 +43,7 @@ namespace Content.Infrastructure.Installers
             Container.Bind<IUIFactory>().To<UIFactory>().AsSingle();
             Container.Bind<IStageFactory>().To<StageFactory>().AsSingle();
             Container.Bind<IBoidFactory>().To<BoidFactory>().AsSingle();
+            Container.Bind<ICameraFactory>().To<CameraFactory>().AsSingle();
         }
     }
 }

@@ -33,6 +33,10 @@ MonoBehaviour:
     m_Address: PFB_LeoEcsSystemController
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 6021d768a74d742429b01ae970fa79fc
+    m_Address: PFB_CameraActor
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 438ec45ee97105a44a9c9efb9546238a, type: 2}
   m_SchemaSet:
