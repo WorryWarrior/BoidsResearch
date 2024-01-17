@@ -4,7 +4,7 @@ namespace Content.Infrastructure.Services.PersistentData
 {
     public interface IPersistentDataService
     {
-        BoidsSettingsData BoidsSettings { get; set; }
+        BoidSettingsData BoidSettings { get; set; }
         PlayerStateData PlayerState { get; set; }
     }
 }

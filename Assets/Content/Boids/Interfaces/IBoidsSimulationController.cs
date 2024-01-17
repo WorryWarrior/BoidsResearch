@@ -4,7 +4,7 @@ namespace Content.Boids.Interfaces
 {
     public interface IBoidsSimulationController
     {
-        Action Initialized { get; set; }
+        public event Action Initialized;
         void InitializeBoids();
     }
 }

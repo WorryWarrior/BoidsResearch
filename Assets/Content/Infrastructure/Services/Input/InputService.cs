@@ -1,4 +1,7 @@
-﻿using Content.Infrastructure.Services.Logging;
+﻿using System.Collections.Generic;
+using Content.Infrastructure.Services.Logging;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Content.Infrastructure.Services.Input
@@ -30,12 +33,31 @@ namespace Content.Infrastructure.Services.Input
         
         private void OnMove(InputAction.CallbackContext context)
         {
+            if (IsCursorOverUI())
+            {
+                MoveValue = 0f;
+                return;
+            }
+
             MoveValue = context.ReadValue<float>();
         }
         
         private void OnLookAroundToggled(InputAction.CallbackContext context)
         {
             LookEnabledValue = context.ReadValueAsButton();
+        }
+
+        private bool IsCursorOverUI()
+        {
+            PointerEventData pointerEventData = new PointerEventData(EventSystem.current)
+            {
+                position = Mouse.current.position.ReadValue()
+            };
+            
+            List<RaycastResult> raycastResultsList = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerEventData, raycastResultsList);
+
+            return raycastResultsList.Count > 0;
         }
     }
 }

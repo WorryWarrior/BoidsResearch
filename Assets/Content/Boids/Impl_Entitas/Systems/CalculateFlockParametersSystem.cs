@@ -43,8 +43,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateFlockmateParameterJob flockmateParameterJob = new()
             {
-                perceptionRadius = _persistentDataService.BoidsSettings.PerceptionRadius,
-                avoidanceRadius = _persistentDataService.BoidsSettings.AvoidanceRadius,
+                perceptionRadius = _persistentDataService.BoidSettings.PerceptionRadius,
+                avoidanceRadius = _persistentDataService.BoidSettings.AvoidanceRadius,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 flockHeadings = _flockHeadings,

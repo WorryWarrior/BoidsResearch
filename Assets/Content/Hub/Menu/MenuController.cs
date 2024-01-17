@@ -38,10 +38,9 @@ namespace Content.Hub.Menu
 
         private void SetupButtons()
         {
-            startStageButton.onClick.AddListener(() =>
-            {
-                _stateMachine.Enter<LoadLevelState, StageStaticData>(SelectedStage);
-            });
+            startStageButton.onClick.AddListener(() => 
+                _stateMachine.Enter<LoadLevelState, StageStaticData>(SelectedStage)
+            );
         }
         
         private void OnSelectedStageChanged(StageStaticData value)

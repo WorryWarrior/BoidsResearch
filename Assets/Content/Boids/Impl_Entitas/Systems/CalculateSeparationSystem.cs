@@ -37,9 +37,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateSeparationJob calculateSeparationJob = new()
             {
-                separationWeight = _persistentDataService.BoidsSettings.SeparationWeight,
-                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
+                separationWeight = _persistentDataService.BoidSettings.SeparationWeight,
+                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
                 boidVelocities = _boidVelocities,
                 boidAverageAvoidances = _boidAverageAvoidances,
                 separationValues = _separationValues

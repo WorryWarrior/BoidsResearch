@@ -36,7 +36,7 @@ namespace Content.Infrastructure.States
 
         private async void LoadProgressOrCreateNew()
         {
-            _persistentDataService.BoidsSettings = await _saveLoadService.LoadBoidsSettings() 
+            _persistentDataService.BoidSettings = await _saveLoadService.LoadBoidsSettings() 
                                                    ?? CreateNewBoidSettings();
             _persistentDataService.PlayerState = await _saveLoadService.LoadPlayerState() 
                                                  ?? CreateNewPlayerState();
@@ -48,7 +48,7 @@ namespace Content.Infrastructure.States
                 PlayerPosition = Vector3.zero
             };
 
-        private BoidsSettingsData CreateNewBoidSettings() =>
+        private BoidSettingsData CreateNewBoidSettings() =>
             new()
             {
                 BoidCount = 2250,
@@ -58,7 +58,7 @@ namespace Content.Infrastructure.States
                 PerceptionRadius = 4.5f,
                 AvoidanceRadius = 4.5f,
                 MaxSteerForce = 12.5f,
-                AlignmentWeight = 5,
+                AlignmentWeight = 5f,
                 CohesionWeight = 2.25f,
                 SeparationWeight = 3f,
                 TargetWeight = 1f,

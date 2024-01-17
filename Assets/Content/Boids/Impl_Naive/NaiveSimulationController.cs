@@ -11,7 +11,7 @@ namespace Content.Boids.Impl_Naive
 {
     public class NaiveSimulationController : MonoBehaviour, IBoidsSimulationController
     {
-        public Action Initialized { get; set; }
+        public event Action Initialized;
 
         private IPersistentDataService _persistentDataService;
         private IBoidFactory _boidFactory;
@@ -30,19 +30,19 @@ namespace Content.Boids.Impl_Naive
         
         public async void InitializeBoids()
         {
-            int safeBoidCount = Mathf.Clamp(_persistentDataService.BoidsSettings.BoidCount, 0, 1000);
+            int safeBoidCount = Mathf.Clamp(_persistentDataService.BoidSettings.BoidCount, 0, 1000);
             GameObject parentGO = new GameObject("Boid_Parent");
             _boidTarget = new GameObject("Boid_Target");
             
             for (int i = 0; i < safeBoidCount; i++) 
             {
-                Vector3 pos = Random.insideUnitSphere * _persistentDataService.BoidsSettings.SpawnRadius;
+                Vector3 pos = Random.insideUnitSphere * _persistentDataService.BoidSettings.SpawnRadius;
                 GameObject boidGO = await _boidFactory.Create(pos);
                 boidGO.transform.parent = parentGO.transform;
                 boidGO.transform.forward = Random.insideUnitSphere;
                 
                 Boid_Naive boidNaiveComponent = boidGO.AddComponent<Boid_Naive>();
-                boidNaiveComponent.Initialize(_persistentDataService.BoidsSettings, _boidTarget.transform);
+                boidNaiveComponent.Initialize(_persistentDataService.BoidSettings, _boidTarget.transform);
                 _boids.Add(boidNaiveComponent);
             }
             
@@ -64,13 +64,13 @@ namespace Content.Boids.Impl_Naive
                     {
                         Vector3 dist = _boids[j].boidPosition - _boids[i].boidPosition;
 
-                        if (dist.magnitude < _persistentDataService.BoidsSettings.PerceptionRadius)
+                        if (dist.magnitude < _persistentDataService.BoidSettings.PerceptionRadius)
                         {
                             numFlockmates++;
                             flockHeading += _boids[j].forwardDir;
                             flockCenter += _boids[j].boidPosition;
 
-                            if (dist.magnitude < _persistentDataService.BoidsSettings.AvoidanceRadius)
+                            if (dist.magnitude < _persistentDataService.BoidSettings.AvoidanceRadius)
                             {
                                 avoidanceHeading -= dist / dist.sqrMagnitude;
                             }

@@ -8,7 +8,7 @@ namespace Content.Boids
 {
     public class StubSimulationController : MonoBehaviour, IBoidsSimulationController
     {
-        public Action Initialized { get; set; }
+        public event Action Initialized;
 
         private ILoggingService _loggingService;
         

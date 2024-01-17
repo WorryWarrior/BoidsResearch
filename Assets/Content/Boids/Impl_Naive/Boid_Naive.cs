@@ -15,7 +15,7 @@ namespace Content.Boids.Impl_Naive
         [HideInInspector] public Vector3 centreOfFlockmates;
         [HideInInspector] public int numPerceivedFlockmates;
 
-        private BoidsSettingsData _settingsData;
+        private BoidSettingsData _settingsData;
         
         private Transform _followTarget;
     
@@ -25,7 +25,7 @@ namespace Content.Boids.Impl_Naive
                 _settingsData.CollisionAvoidanceDistance/*, _settings.obstacleMask*/);
     
         public void Initialize(
-            BoidsSettingsData settingsData,
+            BoidSettingsData settingsData,
             Transform followTarget)
         {
             _settingsData = settingsData;

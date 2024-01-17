@@ -32,13 +32,13 @@ namespace Content.Infrastructure.Services.SaveLoad
 
         public void SaveBoidsSettings()
         {
-            string boidSettingsJson = SerializeObject(_persistentDataService.BoidsSettings);
+            string boidSettingsJson = SerializeObject(_persistentDataService.BoidSettings);
             PlayerPrefs.SetString(BoidsSettingsKey, boidSettingsJson);
         }
 
-        public Task<BoidsSettingsData> LoadBoidsSettings()
+        public Task<BoidSettingsData> LoadBoidsSettings()
         {
-            BoidsSettingsData boidSettings = DeserializeObject<BoidsSettingsData>(PlayerPrefs.GetString(BoidsSettingsKey));
+            BoidSettingsData boidSettings = DeserializeObject<BoidSettingsData>(PlayerPrefs.GetString(BoidsSettingsKey));
             return Task.FromResult(boidSettings);
         }
     }

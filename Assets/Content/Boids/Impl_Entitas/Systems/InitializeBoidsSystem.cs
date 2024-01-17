@@ -17,17 +17,19 @@ namespace Content.Boids.Impl_Entitas.Systems
 
         public void Initialize()
         {
-            for (int i = 0; i < _persistentDataService.BoidsSettings.BoidCount; i++)
+            int missingBoidCount = _persistentDataService.BoidSettings.BoidCount - Contexts.sharedInstance.game.count;
+            
+            for (int i = 0; i < missingBoidCount; i++)
             {
                 GameEntity e = Contexts.sharedInstance.game.CreateEntity();
 
-                float3 position = BoidsMathUtility.InsideUnitSphere() * _persistentDataService.BoidsSettings.SpawnRadius;
+                float3 position = BoidsMathUtility.InsideUnitSphere() * _persistentDataService.BoidSettings.SpawnRadius;
                 e.AddPosition(position);
 
                 float3 rotation = math.forward(quaternion.Euler(BoidsMathUtility.InsideUnitSphere()));
                 e.AddRotation(rotation);
 
-                float startSpeed = (_persistentDataService.BoidsSettings.MinSpeed + _persistentDataService.BoidsSettings.MaxSpeed) / 2;
+                float startSpeed = (_persistentDataService.BoidSettings.MinSpeed + _persistentDataService.BoidSettings.MaxSpeed) / 2;
                 e.AddVelocity(rotation * startSpeed);
 
                 e.AddAcceleration(float3.zero);

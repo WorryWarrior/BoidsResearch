@@ -21,7 +21,7 @@ namespace Content.Hub.Menu
             cardDescription.text = staticData.StageDescription;
             cardImage.sprite = previewSprite;
             
-            selectToggle.onValueChanged.AddListener(arg => OnSelect?.Invoke(arg ? staticData : null));
+            selectToggle.onValueChanged.AddListener(it => OnSelect?.Invoke(it ? staticData : null));
             selectToggle.group = toggleGroup;
         }
     }

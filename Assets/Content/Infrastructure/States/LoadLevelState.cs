@@ -60,8 +60,21 @@ namespace Content.Infrastructure.States
         private async void OnSceneLoaded(SceneName sceneName)
         {
             await InitGameWorld();
+            await InitUI();
+            
+            _stateMachine.Enter<GameLoopState>();
         }
 
+        private async Task InitUI()
+        {
+            await _uiFactory.CreateUIRoot();
+            await _uiFactory
+                .CreateHud()
+                .ContinueWith(it => it.Result.Initialize(), 
+                    TaskScheduler.FromCurrentSynchronizationContext());
+
+        }
+        
         private async Task InitGameWorld()
         {
             await InitBoidController();

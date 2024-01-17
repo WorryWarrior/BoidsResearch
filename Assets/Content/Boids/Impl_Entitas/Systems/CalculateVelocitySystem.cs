@@ -27,8 +27,8 @@ namespace Content.Boids.Impl_Entitas.Systems
                 float3 velocity = e.velocity.value;
                 float speed = math.length(velocity);
                 float3 dir = velocity / speed;
-                speed = math.clamp(speed, _persistentDataService.BoidsSettings.MinSpeed, 
-                    _persistentDataService.BoidsSettings.MaxSpeed);
+                speed = math.clamp(speed, _persistentDataService.BoidSettings.MinSpeed, 
+                    _persistentDataService.BoidSettings.MaxSpeed);
 
                 e.velocity.value = dir * speed;
             }

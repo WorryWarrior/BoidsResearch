@@ -43,7 +43,7 @@ namespace Content.Infrastructure.Factories
 
         public void CleanUp()
         {
-            _assetProvider.Release(key: SelectionMenuPrefabId);
+            _assetProvider.Release(SelectionMenuPrefabId);
         }
 
         public async Task CreateUIRoot()
@@ -57,7 +57,7 @@ namespace Content.Infrastructure.Factories
             GameObject prefab = await _assetProvider.Load<GameObject>(HudPrefabId);
             HudController hud = Object.Instantiate(prefab, _uiRoot.transform).GetComponent<HudController>();
 
-            _container.Inject(hud);
+            _container.InjectGameObject(hud.gameObject);
             return hud;
         }
 

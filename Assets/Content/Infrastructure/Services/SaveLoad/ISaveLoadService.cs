@@ -8,6 +8,6 @@ namespace Content.Infrastructure.Services.SaveLoad
         void SavePlayerState();
         Task<PlayerStateData> LoadPlayerState();
         void SaveBoidsSettings();
-        Task<BoidsSettingsData> LoadBoidsSettings();
+        Task<BoidSettingsData> LoadBoidsSettings();
     }
 }

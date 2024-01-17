@@ -9,7 +9,7 @@ namespace Content.Boids.Impl_Entitas
 {
     public class EntitasSimulationController : MonoBehaviour, IBoidsSimulationController
     {
-        public Action Initialized { get; set; }
+        public event Action Initialized;
         
         private EntitasSystemFactory _systemFactory; 
         private Feature _systems;

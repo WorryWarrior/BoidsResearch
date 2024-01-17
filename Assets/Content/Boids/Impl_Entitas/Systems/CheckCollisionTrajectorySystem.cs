@@ -37,8 +37,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CheckCollisionTrajectoryJob checkCollisionTrajectoryJob = new()
             {
-                boundsRadius = _persistentDataService.BoidsSettings.BoundsRadius,
-                collisionAvoidanceDistance = _persistentDataService.BoidsSettings.CollisionAvoidanceDistance,
+                boundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
+                collisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 collisionTrajectoryStatuses = _boidCollisionTrajectoryStatuses

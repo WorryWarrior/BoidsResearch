@@ -29,6 +29,10 @@ MonoBehaviour:
     m_Address: PFB_LevelCard
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 224d173d89eb19a40b4e5e63f2fb1b5f
+    m_Address: PFB_Hud
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 438ec45ee97105a44a9c9efb9546238a, type: 2}
   m_SchemaSet:

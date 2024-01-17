@@ -40,9 +40,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateTargetOffsetJob targetOffsetJob = new()
             {
-                targetWeight = _persistentDataService.BoidsSettings.TargetWeight,
-                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
+                targetWeight = _persistentDataService.BoidSettings.TargetWeight,
+                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
                 boidPositions = _boidPositions,
                 boidTargetPositions = _boidTargetPositions,
                 boidVelocities = _boidVelocities,

@@ -7,7 +7,8 @@ namespace Content.Infrastructure.Services.StaticData
 {
     public interface IStaticDataService : IInitializable
     {
-        Action Initialized { get; set; }
+        public event Action Initialized;
         List<StageStaticData> GetAllStages();
+        BoidSettingsStaticData GetSettingsStaticData();
     }
 }

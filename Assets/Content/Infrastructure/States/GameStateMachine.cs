@@ -29,7 +29,7 @@ namespace Content.Infrastructure.States
                 [typeof(LoadProgressState)]    = _stateFactory.CreateState<LoadProgressState>(),
                 [typeof(LoadMetaState)]    = _stateFactory.CreateState<LoadMetaState>(),
                 [typeof(LoadLevelState)]    = _stateFactory.CreateState<LoadLevelState>(),
-                
+                [typeof(GameLoopState)]    = _stateFactory.CreateState<GameLoopState>(),
                 
                 [typeof(TestState)]    = _stateFactory.CreateState<TestState>(),
             };

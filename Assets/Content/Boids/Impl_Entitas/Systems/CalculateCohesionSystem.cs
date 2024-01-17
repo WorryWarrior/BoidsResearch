@@ -41,9 +41,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCohesionJob calculateCohesionJob = new()
             {
-                cohesionWeight = _persistentDataService.BoidsSettings.CohesionWeight,
-                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
+                cohesionWeight = _persistentDataService.BoidSettings.CohesionWeight,
+                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
                 boidPositions = _boidPositions,
                 boidVelocities = _boidVelocities,
                 boidFlockCenters = _boidFlockCenters,

@@ -38,9 +38,9 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateAlignmentJob calculateAlignmentJob = new()
             {
-                alignmentWeight = _persistentDataService.BoidsSettings.AlignmentWeight,
-                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
+                alignmentWeight = _persistentDataService.BoidSettings.AlignmentWeight,
+                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
                 boidVelocities = _boidVelocities,
                 boidFlockDirections = _boidAverageFlockDirections,
                 alignmentValues = _alignmentValues

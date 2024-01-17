@@ -54,11 +54,11 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCollisionAvoidanceJob calculateCollisionAvoidanceJob = new()
             {
-                collisionAvoidanceWeight = _persistentDataService.BoidsSettings.CollisionAvoidanceWeight,
-                maxSpeed = _persistentDataService.BoidsSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidsSettings.MaxSteerForce,
-                boundsRadius = _persistentDataService.BoidsSettings.BoundsRadius,
-                collisionAvoidanceDistance = _persistentDataService.BoidsSettings.CollisionAvoidanceDistance,
+                collisionAvoidanceWeight = _persistentDataService.BoidSettings.CollisionAvoidanceWeight,
+                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                boundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
+                collisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
                 boidPositions = _boidPositions,
                 boidRotations = _boidRotations,
                 boidVelocities = _boidVelocities,
