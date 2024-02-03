@@ -16,11 +16,11 @@ namespace Content.Infrastructure.Factories
         private const string HudPrefabId             = "PFB_Hud";
         private const string SelectionMenuPrefabId   = "PFB_SelectionMenu";
         private const string LevelCardPrefabId       = "PFB_LevelCard";
-        
+
         private readonly DiContainer _container;
         private readonly IStaticDataService _staticDataService;
         private readonly IAssetProvider _assetProvider;
-        
+
         private Canvas _uiRoot;
 
         public UIFactory(
@@ -32,12 +32,12 @@ namespace Content.Infrastructure.Factories
             _staticDataService = staticDataService;
             _assetProvider = assetProvider;
         }
-        
+
         public async Task WarmUp()
         {
             await _assetProvider.Load<GameObject>(UIRootPrefabId);
             //await _assetProvider.Load<GameObject>(HudPrefabId);
-            
+
             await _assetProvider.Load<GameObject>(SelectionMenuPrefabId);
         }
 
@@ -66,7 +66,7 @@ namespace Content.Infrastructure.Factories
             GameObject prefab = await _assetProvider.Load<GameObject>(SelectionMenuPrefabId);
             MenuController menu = Object.Instantiate(prefab, _uiRoot.transform).GetComponent<MenuController>();
 
-            foreach (var stageData in _staticDataService.GetAllStages()) 
+            foreach (var stageData in _staticDataService.GetAllStages())
                 await CreateLevelCard(stageData, menu);
 
             _container.InjectGameObject(menu.gameObject);
@@ -77,9 +77,10 @@ namespace Content.Infrastructure.Factories
         {
             GameObject prefab = await _assetProvider.Load<GameObject>(LevelCardPrefabId);
             //Sprite sprite = await _assetProvider.Load<Sprite>(stageStaticData.StageKey);
-            MenuLevelCard card = Object.Instantiate(prefab, menu.levelCardContainer.transform).GetComponent<MenuLevelCard>();
+            MenuLevelCard card = Object.Instantiate(prefab, menu.levelCardContainer.transform)
+                .GetComponent<MenuLevelCard>();
 
-            card.OnSelect += st => menu.SelectedStage = st;
+            card.OnSelect += st => menu.SelectedStage.Value = st;
             card.Initialize(stageStaticData, null, menu.levelCardContainer);
         }
     }

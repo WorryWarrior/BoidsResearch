@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -37,12 +38,12 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateSeparationJob calculateSeparationJob = new()
             {
-                separationWeight = _persistentDataService.BoidSettings.SeparationWeight,
-                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
-                boidVelocities = _boidVelocities,
-                boidAverageAvoidances = _boidAverageAvoidances,
-                separationValues = _separationValues
+                SeparationWeight = _persistentDataService.BoidSettings.SeparationWeight,
+                MaxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                MaxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                BoidVelocities = _boidVelocities,
+                BoidAverageAvoidances = _boidAverageAvoidances,
+                SeparationValues = _separationValues
             };
 
             JobHandle jobHandle = calculateSeparationJob.Schedule(_boidsGroup.count, 32);

@@ -3,35 +3,38 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CheckCollisionTrajectoryJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float boundsRadius;
-    [ReadOnly] public float collisionAvoidanceDistance;
-    [ReadOnly] public NativeArray<float3> boidPositions;
-    [ReadOnly] public NativeArray<float3> boidRotations;
-
-    [WriteOnly] public NativeArray<bool> collisionTrajectoryStatuses;
-
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CheckCollisionTrajectoryJob : IJobParallelFor
     {
-        bool foundCollisionTrajectory = false;
-            
-        for (int i = 0; i < boidPositions.Length; i++)
-        {
-            if (i != index && !foundCollisionTrajectory)
-            {
-                float3 rayProjection = BoidsMathUtility.GetClosestPointOnRay(boidPositions[index],
-                    boidRotations[index], boidPositions[i]);
+        [ReadOnly] public float BoundsRadius;
+        [ReadOnly] public float CollisionAvoidanceDistance;
+        [ReadOnly] public NativeArray<float3> BoidPositions;
+        [ReadOnly] public NativeArray<float3> BoidRotations;
 
-                if (math.distance(boidPositions[index], rayProjection) < collisionAvoidanceDistance &&
-                    math.distance(boidPositions[i], rayProjection) < boundsRadius)
+        [WriteOnly] public NativeArray<bool> CollisionTrajectoryStatuses;
+
+        public void Execute(int index)
+        {
+            bool foundCollisionTrajectory = false;
+
+            for (int i = 0; i < BoidPositions.Length; i++)
+            {
+                if (i != index && !foundCollisionTrajectory)
                 {
-                    foundCollisionTrajectory = true;
+                    float3 rayProjection = BoidsMathUtility.GetClosestPointOnRay(BoidPositions[index],
+                        BoidRotations[index], BoidPositions[i]);
+
+                    if (math.distance(BoidPositions[index], rayProjection) < CollisionAvoidanceDistance &&
+                        math.distance(BoidPositions[i], rayProjection) < BoundsRadius)
+                    {
+                        foundCollisionTrajectory = true;
+                    }
                 }
             }
-        }
 
-        collisionTrajectoryStatuses[index] = foundCollisionTrajectory;
+            CollisionTrajectoryStatuses[index] = foundCollisionTrajectory;
+        }
     }
 }

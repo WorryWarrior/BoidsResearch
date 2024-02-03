@@ -1,7 +1,4 @@
 ﻿using System;
-using Content.StaticData.Converters;
-using Newtonsoft.Json;
-using UnityEngine;
 
 namespace Content.Data
 {

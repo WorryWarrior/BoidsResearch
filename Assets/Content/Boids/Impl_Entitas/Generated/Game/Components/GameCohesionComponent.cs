@@ -6,6 +6,9 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
+using Content.Boids.Impl_Entitas.Components;
+
 public partial class GameEntity {
 
     public CohesionComponent cohesion { get { return (CohesionComponent)GetComponent(GameComponentsLookup.Cohesion); } }

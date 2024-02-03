@@ -6,9 +6,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 {
     public class InitializeBoidsSystem : IInitializeSystem
     {
-        private readonly GameContext _context;
         private readonly IPersistentDataService _persistentDataService;
-        
+
         public InitializeBoidsSystem(
             IPersistentDataService persistentDataService)
         {
@@ -17,16 +16,14 @@ namespace Content.Boids.Impl_Entitas.Systems
 
         public void Initialize()
         {
-            int missingBoidCount = _persistentDataService.BoidSettings.BoidCount - Contexts.sharedInstance.game.count;
-            
-            for (int i = 0; i < missingBoidCount; i++)
+            for (int i = 0; i < _persistentDataService.BoidSettings.BoidCount; i++)
             {
                 GameEntity e = Contexts.sharedInstance.game.CreateEntity();
 
                 float3 position = BoidsMathUtility.InsideUnitSphere() * _persistentDataService.BoidSettings.SpawnRadius;
                 e.AddPosition(position);
 
-                float3 rotation = math.forward(quaternion.Euler(BoidsMathUtility.InsideUnitSphere()));
+                float3 rotation = math.forward(quaternion.Euler(position));
                 e.AddRotation(rotation);
 
                 float startSpeed = (_persistentDataService.BoidSettings.MinSpeed + _persistentDataService.BoidSettings.MaxSpeed) / 2;

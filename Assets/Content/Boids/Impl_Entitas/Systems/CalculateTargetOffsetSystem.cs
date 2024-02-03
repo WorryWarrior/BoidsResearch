@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -40,13 +41,13 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateTargetOffsetJob targetOffsetJob = new()
             {
-                targetWeight = _persistentDataService.BoidSettings.TargetWeight,
-                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
-                boidPositions = _boidPositions,
-                boidTargetPositions = _boidTargetPositions,
-                boidVelocities = _boidVelocities,
-                targetOffsetValues = _targetOffsets
+                TargetWeight = _persistentDataService.BoidSettings.TargetWeight,
+                MaxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                MaxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                BoidPositions = _boidPositions,
+                BoidTargetPositions = _boidTargetPositions,
+                BoidVelocities = _boidVelocities,
+                TargetOffsetValues = _targetOffsets
             };
 
             JobHandle jobHandle = targetOffsetJob.Schedule(_boidsGroup.count, 32);

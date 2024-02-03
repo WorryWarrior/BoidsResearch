@@ -25,7 +25,7 @@ namespace Content.Infrastructure.Installers
             Container.BindInterfacesAndSelfTo<AssetProvider>().AsSingle();
             Container.Bind<ISceneLoader>().To<SceneLoader>().AsSingle();
         }
-        
+
         private void RegisterServices()
         {
             Container.Bind<ILoggingService>().To<LoggingService>().AsSingle().NonLazy();
@@ -39,7 +39,8 @@ namespace Content.Infrastructure.Installers
         {
             Container.BindInterfacesAndSelfTo<StateFactory>().AsSingle();
             Container.BindInterfacesAndSelfTo<EntitasSystemFactory>().AsSingle();
-            
+            Container.BindInterfacesAndSelfTo<NativeSystemFactory>().AsSingle();
+
             Container.Bind<IUIFactory>().To<UIFactory>().AsSingle();
             Container.Bind<IStageFactory>().To<StageFactory>().AsSingle();
             Container.Bind<IBoidFactory>().To<BoidFactory>().AsSingle();

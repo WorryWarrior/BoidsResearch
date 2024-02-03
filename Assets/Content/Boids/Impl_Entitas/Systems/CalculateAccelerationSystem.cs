@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Boids.Jobs;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -38,12 +39,12 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateAccelerationJob targetOffsetJob = new()
             {
-                boidTargetOffsets = _targetOffsets,
-                boidCohesions = _cohesions,
-                boidAlignments = _alignments,
-                boidSeparations = _separations,
-                boidCollisionAvoidances = _collisionAvoidances,
-                accelerations = _accelerations
+                BoidTargetOffsets = _targetOffsets,
+                BoidCohesions = _cohesions,
+                BoidAlignments = _alignments,
+                BoidSeparations = _separations,
+                BoidCollisionAvoidances = _collisionAvoidances,
+                Accelerations = _accelerations
             };
 
             JobHandle jobHandle = targetOffsetJob.Schedule(_boidsGroup.count, 32);

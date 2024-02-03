@@ -6,6 +6,9 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
+using Content.Boids.Impl_Entitas.Components;
+
 public static class GameComponentsLookup {
 
     public const int Acceleration = 0;

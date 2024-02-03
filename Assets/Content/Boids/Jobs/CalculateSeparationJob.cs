@@ -3,21 +3,24 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateSeparationJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float separationWeight;
-    [ReadOnly] public float maxSpeed;
-    [ReadOnly] public float maxSteerForce;
-    [ReadOnly] public NativeArray<float3> boidVelocities;
-    [ReadOnly] public NativeArray<float3> boidAverageAvoidances;
-    [WriteOnly] public NativeArray<float3> separationValues;
-
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateSeparationJob : IJobParallelFor
     {
-        float3 separationValue = BoidsMathUtility.GetClampedDirection(boidAverageAvoidances[index],
-            boidVelocities[index], maxSpeed, maxSteerForce) * separationWeight;
+        [ReadOnly] public float SeparationWeight;
+        [ReadOnly] public float MaxSpeed;
+        [ReadOnly] public float MaxSteerForce;
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
+        [ReadOnly] public NativeArray<float3> BoidAverageAvoidances;
+        [WriteOnly] public NativeArray<float3> SeparationValues;
 
-        separationValues[index] = separationValue;
+        public void Execute(int index)
+        {
+            float3 separationValue = BoidsMathUtility.GetClampedDirection(BoidAverageAvoidances[index],
+                BoidVelocities[index], MaxSpeed, MaxSteerForce) * SeparationWeight;
+
+            SeparationValues[index] = separationValue;
+        }
     }
 }

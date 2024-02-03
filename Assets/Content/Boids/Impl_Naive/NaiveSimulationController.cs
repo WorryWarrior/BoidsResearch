@@ -15,10 +15,10 @@ namespace Content.Boids.Impl_Naive
 
         private IPersistentDataService _persistentDataService;
         private IBoidFactory _boidFactory;
-        
+
         private readonly List<Boid_Naive> _boids = new();
         private GameObject _boidTarget;
-        
+
         [Inject]
         private void Construct(
             IPersistentDataService persistentDataService,
@@ -27,28 +27,33 @@ namespace Content.Boids.Impl_Naive
             _persistentDataService = persistentDataService;
             _boidFactory = boidFactory;
         }
-        
+
         public async void InitializeBoids()
         {
             int safeBoidCount = Mathf.Clamp(_persistentDataService.BoidSettings.BoidCount, 0, 1000);
             GameObject parentGO = new GameObject("Boid_Parent");
             _boidTarget = new GameObject("Boid_Target");
-            
-            for (int i = 0; i < safeBoidCount; i++) 
+
+            for (int i = 0; i < safeBoidCount; i++)
             {
                 Vector3 pos = Random.insideUnitSphere * _persistentDataService.BoidSettings.SpawnRadius;
                 GameObject boidGO = await _boidFactory.Create(pos);
                 boidGO.transform.parent = parentGO.transform;
                 boidGO.transform.forward = Random.insideUnitSphere;
-                
+
                 Boid_Naive boidNaiveComponent = boidGO.AddComponent<Boid_Naive>();
                 boidNaiveComponent.Initialize(_persistentDataService.BoidSettings, _boidTarget.transform);
                 _boids.Add(boidNaiveComponent);
             }
-            
+
             Initialized?.Invoke();
         }
-        
+
+        public void DestroyBoids()
+        {
+
+        }
+
         private void Update ()
         {
             for (int i = 0; i < _boids.Count; i++)
@@ -57,7 +62,7 @@ namespace Content.Boids.Impl_Naive
                 Vector3 flockCenter = Vector3.zero;
                 Vector3 avoidanceHeading = Vector3.zero;
                 int numFlockmates = 0;
-            
+
                 for (int j = 0; j < _boids.Count; j++)
                 {
                     if (i != j)
@@ -77,7 +82,7 @@ namespace Content.Boids.Impl_Naive
                         }
                     }
                 }
-            
+
                 _boids[i].avgFlockHeading = flockHeading;
                 _boids[i].centreOfFlockmates = flockCenter;
                 _boids[i].avgAvoidanceHeading = avoidanceHeading;
@@ -85,16 +90,16 @@ namespace Content.Boids.Impl_Naive
 
                 _boids[i].UpdateBoid();
             }
-        
+
             /*int numBoids = boids.Length;
         BoidData[] boidData = new BoidData[numBoids];
 
-        for (int i = 0; i < boids.Length; i++) 
+        for (int i = 0; i < boids.Length; i++)
         {
             boidData[i].position = boids[i].boidPosition;
             boidData[i].direction = boids[i].forward;
         }
-        
+
         ComputeBuffer boidBuffer = new ComputeBuffer (numBoids, BoidData.Size);
         boidBuffer.SetData (boidData);
 
@@ -108,8 +113,8 @@ namespace Content.Boids.Impl_Naive
 
         boidBuffer.GetData (boidData);
 
-        
-        for (int i = 0; i < boids.Length; i++) 
+
+        for (int i = 0; i < boids.Length; i++)
         {
             boids[i].avgFlockHeading = boidData[i].flockHeading;
             boids[i].centreOfFlockmates = boidData[i].flockCentre;
@@ -118,11 +123,11 @@ namespace Content.Boids.Impl_Naive
 
             boids[i].UpdateBoid ();
         }
-        
+
         boidBuffer.Release();*/
         }
-        
-        
+
+
         /*public struct BoidData
          {
             public Vector3 position;

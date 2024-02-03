@@ -10,29 +10,34 @@ namespace Content.Boids.Impl_Entitas
     public class EntitasSimulationController : MonoBehaviour, IBoidsSimulationController
     {
         public event Action Initialized;
-        
-        private EntitasSystemFactory _systemFactory; 
+
+        private EntitasSystemFactory _systemFactory;
         private Feature _systems;
-        
+
         [Inject]
         private void Construct(
             EntitasSystemFactory systemFactory)
         {
             _systemFactory = systemFactory;
         }
-        
+
         private void Update()
         {
             _systems.Execute();
             _systems.Cleanup();
         }
-        
+
         public void InitializeBoids()
         {
             _systems = ConstructEntitasSystems();
             _systems.Initialize();
-            
+
             Initialized?.Invoke();
+        }
+
+        public void DestroyBoids()
+        {
+            Contexts.sharedInstance.game.DestroyAllEntities();
         }
 
         private Feature ConstructEntitasSystems()
@@ -52,7 +57,7 @@ namespace Content.Boids.Impl_Entitas
             simulation.Add(_systemFactory.CreateSystem<UpdatePositionSystem>());
             simulation.Add(_systemFactory.CreateSystem<UpdateRotationSystem>());
             simulation.Add(_systemFactory.CreateSystem<UpdateLinkedGameObjectPositionSystem>());
-            
+
             return simulation;
         }
     }

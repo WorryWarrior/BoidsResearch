@@ -7,22 +7,22 @@ namespace Content.UI.Windows
     public class OneButtonWindow : WindowBase
     {
         [Header("Buttons")]
-        [SerializeField] private Button acceptButton = null;
+        [SerializeField] private Button confirmButton = null;
 
         public override Promise<bool> Show<T>(T data, string titleText = "")
         {
-            acceptButton.onClick.AddListener(Accept);
-            
+            confirmButton.onClick.AddListener(Confirm);
+
             return base.Show(data, titleText);
         }
 
         protected override void Close()
         {
-            acceptButton.onClick.RemoveAllListeners();
+            confirmButton.onClick.RemoveAllListeners();
             base.Close();
         }
 
-        private void Accept()
+        private void Confirm()
         {
             UserAccepted = true;
             Close();

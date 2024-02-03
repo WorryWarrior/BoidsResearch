@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using Content.Boids.Jobs;
+using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -26,8 +27,8 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateRotationJob calculateRotationJob = new()
             {
-                boidRotations = _rotations,
-                boidVelocities = _velocities,
+                BoidRotations = _rotations,
+                BoidVelocities = _velocities,
             };
 
             JobHandle jobHandle = calculateRotationJob.Schedule(_boidsGroup.count, 32);

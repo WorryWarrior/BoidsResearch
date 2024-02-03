@@ -3,15 +3,18 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateRotationJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public NativeArray<float3> boidVelocities;
-    [WriteOnly] public NativeArray<float3> boidRotations;
-        
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateRotationJob : IJobParallelFor
     {
-        float3 dir = boidVelocities[index] / math.length(boidVelocities[index]);
-        boidRotations[index] = math.forward(quaternion.LookRotationSafe(dir, math.up()));
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
+        [WriteOnly] public NativeArray<float3> BoidRotations;
+
+        public void Execute(int index)
+        {
+            float3 dir = BoidVelocities[index] / math.length(BoidVelocities[index]);
+            BoidRotations[index] = math.forward(quaternion.LookRotationSafe(dir, math.up()));
+        }
     }
 }

@@ -10,14 +10,14 @@ namespace Content.Infrastructure.Services.SaveLoad
     {
         private const string PlayerStateKey = "PlayerState";
         private const string BoidsSettingsKey = "BoidsSettings";
-        
+
         private readonly IPersistentDataService _persistentDataService;
 
         public SaveLoadService(IPersistentDataService persistentDataService)
         {
             _persistentDataService = persistentDataService;
         }
-        
+
         public void SavePlayerState()
         {
             string playerStateJson = SerializeObject(_persistentDataService.PlayerState);
@@ -40,6 +40,12 @@ namespace Content.Infrastructure.Services.SaveLoad
         {
             BoidSettingsData boidSettings = DeserializeObject<BoidSettingsData>(PlayerPrefs.GetString(BoidsSettingsKey));
             return Task.FromResult(boidSettings);
+        }
+
+        public async void RestoreSavedBoidsSettings()
+        {
+            BoidSettingsData savedBoidSettings = await LoadBoidsSettings();
+            _persistentDataService.BoidSettings = savedBoidSettings;
         }
     }
 }

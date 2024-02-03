@@ -3,52 +3,55 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateFlockmateParameterJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float perceptionRadius;
-    [ReadOnly] public float avoidanceRadius;
-    [ReadOnly] public NativeArray<float3> boidPositions;
-    [ReadOnly] public NativeArray<float3> boidRotations;
-        
-    [WriteOnly] public NativeArray<float3> flockHeadings;
-    [WriteOnly] public NativeArray<int> flockmateNumbers;
-    [WriteOnly] public NativeArray<float3> flockCenters;
-    [WriteOnly] public NativeArray<float3> averageAvoidances;
-        
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateFlockmateParameterJob : IJobParallelFor
     {
-        float3 currentPosition = boidPositions[index];
-            
-        int flockmates = 0;
-        float3 flockHeading = float3.zero;
-        float3 flockmatesCenter = float3.zero;
-        float3 avoidanceHeading = float3.zero;
-            
-        for (int i = 0; i < boidPositions.Length; i++)
+        [ReadOnly] public float PerceptionRadius;
+        [ReadOnly] public float AvoidanceRadius;
+        [ReadOnly] public NativeArray<float3> BoidPositions;
+        [ReadOnly] public NativeArray<float3> BoidRotations;
+
+        [WriteOnly] public NativeArray<float3> FlockHeadings;
+        [WriteOnly] public NativeArray<int> FlockmateNumbers;
+        [WriteOnly] public NativeArray<float3> FlockCenters;
+        [WriteOnly] public NativeArray<float3> AverageAvoidances;
+
+        public void Execute(int index)
         {
-            if (i != index)
+            float3 currentPosition = BoidPositions[index];
+
+            int flockmates = 0;
+            float3 flockHeading = float3.zero;
+            float3 flockmatesCenter = float3.zero;
+            float3 avoidanceHeading = float3.zero;
+
+            for (int i = 0; i < BoidPositions.Length; i++)
             {
-                float3 otherPosition = boidPositions[i];
-                float sqrDst = math.distancesq(currentPosition, otherPosition);
-
-                if (sqrDst < perceptionRadius * perceptionRadius)
+                if (i != index)
                 {
-                    flockmates++;
-                    flockHeading += boidRotations[i];
-                    flockmatesCenter += otherPosition;
+                    float3 otherPosition = BoidPositions[i];
+                    float sqrDst = math.distancesq(currentPosition, otherPosition);
 
-                    if (sqrDst < avoidanceRadius * avoidanceRadius)
+                    if (sqrDst < PerceptionRadius * PerceptionRadius)
                     {
-                        avoidanceHeading -= (otherPosition - currentPosition) / sqrDst;
+                        flockmates++;
+                        flockHeading += BoidRotations[i];
+                        flockmatesCenter += otherPosition;
+
+                        if (sqrDst < AvoidanceRadius * AvoidanceRadius)
+                        {
+                            avoidanceHeading -= (otherPosition - currentPosition) / sqrDst;
+                        }
                     }
                 }
             }
+
+            FlockmateNumbers[index] = flockmates;
+            FlockHeadings[index] = flockHeading;
+            FlockCenters[index] = flockmatesCenter;
+            AverageAvoidances[index] = avoidanceHeading;
         }
-            
-        flockmateNumbers[index] = flockmates;
-        flockHeadings[index] = flockHeading;
-        flockCenters[index] = flockmatesCenter;
-        averageAvoidances[index] = avoidanceHeading;
     }
 }

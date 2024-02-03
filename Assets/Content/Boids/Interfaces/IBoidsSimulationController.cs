@@ -6,5 +6,6 @@ namespace Content.Boids.Interfaces
     {
         public event Action Initialized;
         void InitializeBoids();
+        void DestroyBoids();
     }
 }

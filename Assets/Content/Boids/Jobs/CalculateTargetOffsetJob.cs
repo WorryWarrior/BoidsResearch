@@ -3,24 +3,27 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateTargetOffsetJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float targetWeight;
-    [ReadOnly] public float maxSpeed;
-    [ReadOnly] public float maxSteerForce;
-    [ReadOnly] public NativeArray<float3> boidPositions;
-    [ReadOnly] public NativeArray<float3> boidTargetPositions;
-    [ReadOnly] public NativeArray<float3> boidVelocities;
-        
-    [WriteOnly] public NativeArray<float3> targetOffsetValues;
-
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateTargetOffsetJob : IJobParallelFor
     {
-        float3 targetOffsetValue = BoidsMathUtility.GetClampedDirection(
-            boidTargetPositions[index] - boidPositions[index], boidVelocities[index], 
-            maxSpeed, maxSteerForce) * targetWeight;
+        [ReadOnly] public float TargetWeight;
+        [ReadOnly] public float MaxSpeed;
+        [ReadOnly] public float MaxSteerForce;
+        [ReadOnly] public NativeArray<float3> BoidPositions;
+        [ReadOnly] public NativeArray<float3> BoidTargetPositions;
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
 
-        targetOffsetValues[index] = targetOffsetValue;
+        [WriteOnly] public NativeArray<float3> TargetOffsetValues;
+
+        public void Execute(int index)
+        {
+            float3 targetOffsetValue = BoidsMathUtility.GetClampedDirection(
+                BoidTargetPositions[index] - BoidPositions[index], BoidVelocities[index],
+                MaxSpeed, MaxSteerForce) * TargetWeight;
+
+            TargetOffsetValues[index] = targetOffsetValue;
+        }
     }
 }

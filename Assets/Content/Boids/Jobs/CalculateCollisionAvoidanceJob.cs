@@ -3,56 +3,59 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
+namespace Content.Boids.Jobs
+{
+    [BurstCompile]
     public struct CalculateCollisionAvoidanceJob : IJobParallelFor
     {
-        [ReadOnly] public float collisionAvoidanceWeight;
-        [ReadOnly] public float maxSpeed;
-        [ReadOnly] public float maxSteerForce;
-        [ReadOnly] public float boundsRadius;
-        [ReadOnly] public float collisionAvoidanceDistance;
-        [ReadOnly] public NativeArray<float3> boidPositions;
-        [ReadOnly] public NativeArray<float3> boidRotations;
-        [ReadOnly] public NativeArray<float3> boidVelocities;
-        [ReadOnly] public NativeArray<bool> boidIsOnCollisionTrajectoryStatuses;
-        [ReadOnly] public NativeArray<float3> avoidanceRaycastDirections;
+        [ReadOnly] public float CollisionAvoidanceWeight;
+        [ReadOnly] public float MaxSpeed;
+        [ReadOnly] public float MaxSteerForce;
+        [ReadOnly] public float BoundsRadius;
+        [ReadOnly] public float CollisionAvoidanceDistance;
+        [ReadOnly] public NativeArray<float3> BoidPositions;
+        [ReadOnly] public NativeArray<float3> BoidRotations;
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
+        [ReadOnly] public NativeArray<bool> BoidIsOnCollisionTrajectoryStatuses;
+        [ReadOnly] public NativeArray<float3> AvoidanceRaycastDirections;
 
-        [WriteOnly] public NativeArray<float3> collisionAvoidances;
+        [WriteOnly] public NativeArray<float3> CollisionAvoidances;
 
         public void Execute(int index)
         {
-            if (!boidIsOnCollisionTrajectoryStatuses[index])
+            if (!BoidIsOnCollisionTrajectoryStatuses[index])
             {
-                collisionAvoidances[index] = float3.zero;
+                CollisionAvoidances[index] = float3.zero;
                 return;
             }
-            
-            float3 avoidanceTrajectory = boidRotations[index];
-            
-            for (int i = 0; i < boidPositions.Length; i++)
+
+            float3 avoidanceTrajectory = BoidRotations[index];
+
+            for (int i = 0; i < BoidPositions.Length; i++)
             {
                 if (i != index)
                 {
-                    for (int j = 0; j < avoidanceRaycastDirections.Length; j++)
+                    for (int j = 0; j < AvoidanceRaycastDirections.Length; j++)
                     {
-                        float3 rayDirection = math.mul(quaternion.LookRotationSafe(boidRotations[index], math.up()), 
-                            avoidanceRaycastDirections[j]);
-                        float3 rayProjection = BoidsMathUtility.GetClosestPointOnRay(boidPositions[index],
-                            rayDirection, boidPositions[i]);
+                        float3 rayDirection = math.mul(quaternion.LookRotationSafe(BoidRotations[index], math.up()),
+                            AvoidanceRaycastDirections[j]);
+                        float3 rayProjection = BoidsMathUtility.GetClosestPointOnRay(BoidPositions[index],
+                            rayDirection, BoidPositions[i]);
 
-                        if (math.distance(boidPositions[index], rayProjection) >= collisionAvoidanceDistance &&
-                            math.distance(boidPositions[i], rayProjection) < boundsRadius)
+                        if (math.distance(BoidPositions[index], rayProjection) >= CollisionAvoidanceDistance &&
+                            math.distance(BoidPositions[i], rayProjection) < BoundsRadius)
                         {
-                            collisionAvoidances[index] = BoidsMathUtility.GetClampedDirection(
-                                avoidanceTrajectory, boidVelocities[index], 
-                                maxSpeed, maxSteerForce) * collisionAvoidanceWeight;
+                            CollisionAvoidances[index] = BoidsMathUtility.GetClampedDirection(
+                                avoidanceTrajectory, BoidVelocities[index],
+                                MaxSpeed, MaxSteerForce) * CollisionAvoidanceWeight;
                             return;
                         }
                     }
                 }
             }
 
-            collisionAvoidances[index] = BoidsMathUtility.GetClampedDirection(
-                avoidanceTrajectory, boidVelocities[index], maxSpeed, maxSteerForce) * collisionAvoidanceWeight;
+            CollisionAvoidances[index] = BoidsMathUtility.GetClampedDirection(
+                avoidanceTrajectory, BoidVelocities[index], MaxSpeed, MaxSteerForce) * CollisionAvoidanceWeight;
         }
     }
+}

@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -21,7 +22,7 @@ namespace Content.Boids.Impl_Entitas.Systems
         private float3[] _avoidanceRaycastDirectionsArray;
 
         private float3[] _AvoidanceRaycastDirectionsArray =>
-            _avoidanceRaycastDirectionsArray ??= 
+            _avoidanceRaycastDirectionsArray ??=
                 BoidsMathUtility.GetAvoidanceRayDirections(AVOIDANCE_RAYCAST_DIRECTION_COUNT);
 
         public CalculateCollisionAvoidanceSystem(
@@ -32,6 +33,16 @@ namespace Content.Boids.Impl_Entitas.Systems
 
         public void Execute()
         {
+            if (_persistentDataService.BoidSettings.CollisionAvoidanceWeight == 0f)
+            {
+                foreach (GameEntity e in _boidsGroup)
+                {
+                    e.ReplaceAvoidance(float3.zero);
+                }
+
+                return;
+            }
+
             NativeArray<float3> _boidPositions = new NativeArray<float3>(_boidsGroup.count, Allocator.TempJob);
             NativeArray<float3> _boidRotations = new NativeArray<float3>(_boidsGroup.count, Allocator.TempJob);
             NativeArray<float3> _boidVelocities = new NativeArray<float3>(_boidsGroup.count, Allocator.TempJob);
@@ -54,17 +65,17 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCollisionAvoidanceJob calculateCollisionAvoidanceJob = new()
             {
-                collisionAvoidanceWeight = _persistentDataService.BoidSettings.CollisionAvoidanceWeight,
-                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
-                boundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
-                collisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
-                boidPositions = _boidPositions,
-                boidRotations = _boidRotations,
-                boidVelocities = _boidVelocities,
-                boidIsOnCollisionTrajectoryStatuses = _boidIsOnCollisionTrajectoryStatuses,
-                avoidanceRaycastDirections = _avoidanceRaycastDirections,
-                collisionAvoidances = _collisionAvoidances
+                CollisionAvoidanceWeight = _persistentDataService.BoidSettings.CollisionAvoidanceWeight,
+                MaxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                MaxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                BoundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
+                CollisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
+                BoidPositions = _boidPositions,
+                BoidRotations = _boidRotations,
+                BoidVelocities = _boidVelocities,
+                BoidIsOnCollisionTrajectoryStatuses = _boidIsOnCollisionTrajectoryStatuses,
+                AvoidanceRaycastDirections = _avoidanceRaycastDirections,
+                CollisionAvoidances = _collisionAvoidances
             };
 
             JobHandle jobHandle = calculateCollisionAvoidanceJob.Schedule(_boidsGroup.count, 32);

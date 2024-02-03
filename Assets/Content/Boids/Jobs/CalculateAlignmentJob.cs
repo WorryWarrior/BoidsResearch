@@ -3,22 +3,25 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateAlignmentJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float alignmentWeight;
-    [ReadOnly] public float maxSpeed;
-    [ReadOnly] public float maxSteerForce;
-    [ReadOnly] public NativeArray<float3> boidVelocities;
-    [ReadOnly] public NativeArray<float3> boidFlockDirections;
-        
-    [WriteOnly] public NativeArray<float3> alignmentValues;
-
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateAlignmentJob : IJobParallelFor
     {
-        float3 alignmentValue = BoidsMathUtility.GetClampedDirection(boidFlockDirections[index],
-            boidVelocities[index], maxSpeed, maxSteerForce) * alignmentWeight;
+        [ReadOnly] public float AlignmentWeight;
+        [ReadOnly] public float MaxSpeed;
+        [ReadOnly] public float MaxSteerForce;
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
+        [ReadOnly] public NativeArray<float3> BoidFlockDirections;
 
-        alignmentValues[index] = alignmentValue;
+        [WriteOnly] public NativeArray<float3> AlignmentValues;
+
+        public void Execute(int index)
+        {
+            float3 alignmentValue = BoidsMathUtility.GetClampedDirection(BoidFlockDirections[index],
+                BoidVelocities[index], MaxSpeed, MaxSteerForce) * AlignmentWeight;
+
+            AlignmentValues[index] = alignmentValue;
+        }
     }
 }

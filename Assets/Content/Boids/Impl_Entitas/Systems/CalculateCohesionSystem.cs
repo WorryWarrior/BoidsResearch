@@ -1,3 +1,4 @@
+using Content.Boids.Jobs;
 using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
@@ -41,13 +42,13 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateCohesionJob calculateCohesionJob = new()
             {
-                cohesionWeight = _persistentDataService.BoidSettings.CohesionWeight,
-                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
-                boidPositions = _boidPositions,
-                boidVelocities = _boidVelocities,
-                boidFlockCenters = _boidFlockCenters,
-                cohesionValues = _cohesionValues
+                CohesionWeight = _persistentDataService.BoidSettings.CohesionWeight,
+                MaxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                MaxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                BoidPositions = _boidPositions,
+                BoidVelocities = _boidVelocities,
+                BoidFlockCenters = _boidFlockCenters,
+                CohesionValues = _cohesionValues
             };
 
             JobHandle jobHandle = calculateCohesionJob.Schedule(_boidsGroup.count, 32);

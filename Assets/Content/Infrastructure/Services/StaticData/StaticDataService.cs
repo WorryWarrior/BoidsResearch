@@ -22,11 +22,11 @@ namespace Content.Infrastructure.Services.StaticData
             Initialized?.Invoke();
         }
 
-        public List<StageStaticData> GetAllStages() => 
+        public List<StageStaticData> GetAllStages() =>
             _stages.Values.ToList();
-        public BoidSettingsStaticData GetSettingsStaticData() => 
+        public BoidSettingsStaticData GetSettingsStaticData() =>
             _boidSettingsStaticData;
-        
+
         // At this point it could be loaded remotely, constructed locally etc...
         private void LoadStagesData()
         {
@@ -84,7 +84,8 @@ namespace Content.Infrastructure.Services.StaticData
             BoidAlignmentWeightValues = new Vector2(0f, 10f),
             BoidCohesionWeightValues = new Vector2(0f, 10f),
             BoidSeparationWeightValues = new Vector2(0f, 10f),
-            BoidTargetWeightValues = new Vector2(0f, 10f)
+            BoidTargetWeightValues = new Vector2(0f, 10f),
+            BoidCollisionAvoidanceValues = new Vector2(0f, 30f)
         };
 
         #endregion

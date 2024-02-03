@@ -22,5 +22,7 @@ namespace Content.StaticData
         public Vector2 BoidSeparationWeightValues { get; set; }
         [JsonConverter(typeof(Vector2Converter))]
         public Vector2 BoidTargetWeightValues { get; set; }
+        [JsonConverter(typeof(Vector2Converter))]
+        public Vector2 BoidCollisionAvoidanceValues { get; set; }
     }
 }

@@ -11,19 +11,24 @@ namespace Content.Boids
         public event Action Initialized;
 
         private ILoggingService _loggingService;
-        
+
         [Inject]
         private void Construct(
             ILoggingService loggingService)
         {
             _loggingService = loggingService;
         }
-        
+
         public void InitializeBoids()
         {
             _loggingService.LogError("Stub Boid Simulation Initialized", this);
-            
+
             Initialized?.Invoke();
+        }
+
+        public void DestroyBoids()
+        {
+
         }
     }
 }

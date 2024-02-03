@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -16,7 +17,7 @@ namespace Content.Boids.Impl_Entitas.Systems
             GameMatcher.FlockCenter,
             GameMatcher.AverageAvoidance));
         private readonly IPersistentDataService _persistentDataService;
-        
+
         public CalculateFlockParametersSystem(
             IPersistentDataService persistentDataService)
         {
@@ -43,14 +44,14 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateFlockmateParameterJob flockmateParameterJob = new()
             {
-                perceptionRadius = _persistentDataService.BoidSettings.PerceptionRadius,
-                avoidanceRadius = _persistentDataService.BoidSettings.AvoidanceRadius,
-                boidPositions = _boidPositions,
-                boidRotations = _boidRotations,
-                flockHeadings = _flockHeadings,
-                flockmateNumbers = _flockmateNumbers,
-                flockCenters = _flockCenters,
-                averageAvoidances = _averageAvoidances
+                PerceptionRadius = _persistentDataService.BoidSettings.PerceptionRadius,
+                AvoidanceRadius = _persistentDataService.BoidSettings.AvoidanceRadius,
+                BoidPositions = _boidPositions,
+                BoidRotations = _boidRotations,
+                FlockHeadings = _flockHeadings,
+                FlockmateNumbers = _flockmateNumbers,
+                FlockCenters = _flockCenters,
+                AverageAvoidances = _averageAvoidances
             };
 
             JobHandle jobHandle = flockmateParameterJob.Schedule(_boidsGroup.count, 32);
@@ -73,26 +74,6 @@ namespace Content.Boids.Impl_Entitas.Systems
             _flockmateNumbers.Dispose();
             _flockCenters.Dispose();
             _averageAvoidances.Dispose();
-
-            /*foreach (GameEntity e in _boidsGroup)
-            {
-                e.flockmateNumber.flockmates = 0;
-                
-                foreach (GameEntity otherE in _boidsGroup)
-                {
-                    if (otherE != e)
-                    {
-                        float sqrDst = (otherE.position.x - e.position.x) * (otherE.position.x - e.position.x) + 
-                                       (otherE.position.y - e.position.y) * (otherE.position.y - e.position.y) + 
-                                       (otherE.position.z - e.position.z) * (otherE.position.z - e.position.z);
-    
-                        if (sqrDst < _avoidanceRadius)
-                        {
-                           e.flockmateNumber.flockmates++;
-                        }
-                    }
-                }
-            }*/
         }
     }
 }

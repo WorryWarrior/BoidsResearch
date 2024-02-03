@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -38,12 +39,12 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CalculateAlignmentJob calculateAlignmentJob = new()
             {
-                alignmentWeight = _persistentDataService.BoidSettings.AlignmentWeight,
-                maxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
-                maxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
-                boidVelocities = _boidVelocities,
-                boidFlockDirections = _boidAverageFlockDirections,
-                alignmentValues = _alignmentValues
+                AlignmentWeight = _persistentDataService.BoidSettings.AlignmentWeight,
+                MaxSpeed = _persistentDataService.BoidSettings.MaxSpeed,
+                MaxSteerForce = _persistentDataService.BoidSettings.MaxSteerForce,
+                BoidVelocities = _boidVelocities,
+                BoidFlockDirections = _boidAverageFlockDirections,
+                AlignmentValues = _alignmentValues
             };
 
             JobHandle jobHandle = calculateAlignmentJob.Schedule(_boidsGroup.count, 32);

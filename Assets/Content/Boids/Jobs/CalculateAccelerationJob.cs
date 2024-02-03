@@ -3,26 +3,29 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateAccelerationJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public NativeArray<float3> boidTargetOffsets;
-    [ReadOnly] public NativeArray<float3> boidCohesions;
-    [ReadOnly] public NativeArray<float3> boidAlignments;
-    [ReadOnly] public NativeArray<float3> boidSeparations;
-    [ReadOnly] public NativeArray<float3> boidCollisionAvoidances;
-
-    [WriteOnly] public NativeArray<float3> accelerations;
-        
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateAccelerationJob : IJobParallelFor
     {
-        float3 acceleration = boidTargetOffsets[index];
-            
-        acceleration += boidCohesions[index];
-        acceleration += boidSeparations[index];
-        acceleration += boidAlignments[index];
-        acceleration += boidCollisionAvoidances[index];
-            
-        accelerations[index] = acceleration;
+        [ReadOnly] public NativeArray<float3> BoidTargetOffsets;
+        [ReadOnly] public NativeArray<float3> BoidCohesions;
+        [ReadOnly] public NativeArray<float3> BoidAlignments;
+        [ReadOnly] public NativeArray<float3> BoidSeparations;
+        [ReadOnly] public NativeArray<float3> BoidCollisionAvoidances;
+
+        [WriteOnly] public NativeArray<float3> Accelerations;
+
+        public void Execute(int index)
+        {
+            float3 acceleration = BoidTargetOffsets[index];
+
+            acceleration += BoidCohesions[index];
+            acceleration += BoidSeparations[index];
+            acceleration += BoidAlignments[index];
+            acceleration += BoidCollisionAvoidances[index];
+
+            Accelerations[index] = acceleration;
+        }
     }
 }

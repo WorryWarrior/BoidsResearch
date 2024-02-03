@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Content.Boids.Interfaces;
+using Content.Data;
 using Content.Infrastructure.Factories.Interfaces;
 using Content.Infrastructure.SceneManagement;
 using Content.Infrastructure.Services.Logging;
 using Content.Infrastructure.States.Interfaces;
 using Content.StaticData;
-using UnityEngine;
 
 namespace Content.Infrastructure.States
 {
@@ -18,9 +18,10 @@ namespace Content.Infrastructure.States
         private readonly IBoidFactory _boidFactory;
         private readonly ICameraFactory _cameraFactory;
         private readonly ILoggingService _loggingService;
-        
+
         private StageStaticData _currentStageStaticData;
-        
+        private IBoidsSimulationController _currentStageBoidsSimulationController;
+
         public LoadLevelState(
             GameStateMachine gameStateMachine,
             ISceneLoader sceneLoader,
@@ -38,18 +39,18 @@ namespace Content.Infrastructure.States
             _cameraFactory = cameraFactory;
             _loggingService = loggingService;
         }
-        
+
         public async void Enter(StageStaticData stageStaticData)
         {
             _currentStageStaticData = stageStaticData;
-            
+
             await _stageFactory.WarmUp();
             await _boidFactory.WarmUp();
             await _cameraFactory.WarmUp();
-            
+
             await _sceneLoader.LoadScene(SceneName.Core, OnSceneLoaded);
         }
-        
+
         public void Exit()
         {
             _stageFactory.CleanUp();
@@ -61,8 +62,11 @@ namespace Content.Infrastructure.States
         {
             await InitGameWorld();
             await InitUI();
-            
-            _stateMachine.Enter<GameLoopState>();
+
+            _stateMachine.Enter<GameLoopState, GameLoopData>(new GameLoopData
+            {
+                LevelBoidsSimulationController = _currentStageBoidsSimulationController
+            });
         }
 
         private async Task InitUI()
@@ -70,11 +74,10 @@ namespace Content.Infrastructure.States
             await _uiFactory.CreateUIRoot();
             await _uiFactory
                 .CreateHud()
-                .ContinueWith(it => it.Result.Initialize(), 
+                .ContinueWith(it => it.Result.Initialize(),
                     TaskScheduler.FromCurrentSynchronizationContext());
-
         }
-        
+
         private async Task InitGameWorld()
         {
             await InitBoidController();
@@ -83,10 +86,11 @@ namespace Content.Infrastructure.States
 
         private async Task InitBoidController()
         {
-            IBoidsSimulationController boidsSimulationController = 
+            IBoidsSimulationController boidsSimulationController =
                 await _stageFactory.CreateBoidsController(_currentStageStaticData.BoidsSimulationType);
-            
-            boidsSimulationController.Initialized += () => 
+
+            _currentStageBoidsSimulationController = boidsSimulationController;
+            boidsSimulationController.Initialized += () =>
                 _loggingService.LogMessage("Boid Simulation Ready", this);
             boidsSimulationController.InitializeBoids();
         }

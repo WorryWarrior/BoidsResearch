@@ -3,23 +3,26 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-[BurstCompile]
-public struct CalculateCohesionJob : IJobParallelFor
+namespace Content.Boids.Jobs
 {
-    [ReadOnly] public float cohesionWeight;
-    [ReadOnly] public float maxSpeed;
-    [ReadOnly] public float maxSteerForce;
-    [ReadOnly] public NativeArray<float3> boidPositions;
-    [ReadOnly] public NativeArray<float3> boidVelocities;
-    [ReadOnly] public NativeArray<float3> boidFlockCenters;
-    [WriteOnly] public NativeArray<float3> cohesionValues;
-
-    public void Execute(int index)
+    [BurstCompile]
+    public struct CalculateCohesionJob : IJobParallelFor
     {
-        float3 cohesionValue = BoidsMathUtility.GetClampedDirection(
-            boidFlockCenters[index] - boidPositions[index], boidVelocities[index],
-            maxSpeed, maxSteerForce) * cohesionWeight;
+        [ReadOnly] public float CohesionWeight;
+        [ReadOnly] public float MaxSpeed;
+        [ReadOnly] public float MaxSteerForce;
+        [ReadOnly] public NativeArray<float3> BoidPositions;
+        [ReadOnly] public NativeArray<float3> BoidVelocities;
+        [ReadOnly] public NativeArray<float3> BoidFlockCenters;
+        [WriteOnly] public NativeArray<float3> CohesionValues;
 
-        cohesionValues[index] = cohesionValue;
+        public void Execute(int index)
+        {
+            float3 cohesionValue = BoidsMathUtility.GetClampedDirection(
+                BoidFlockCenters[index] - BoidPositions[index], BoidVelocities[index],
+                MaxSpeed, MaxSteerForce) * CohesionWeight;
+
+            CohesionValues[index] = cohesionValue;
+        }
     }
 }

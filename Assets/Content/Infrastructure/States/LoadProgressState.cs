@@ -21,28 +21,28 @@ namespace Content.Infrastructure.States
             _persistentDataService = persistentDataService;
             _saveLoadService = saveLoadService;
         }
-        
+
         public void Enter()
         {
             LoadProgressOrCreateNew();
-            
+
             _stateMachine.Enter<LoadMetaState>();
         }
-        
+
         public void Exit()
         {
-            
+
         }
 
         private async void LoadProgressOrCreateNew()
         {
-            _persistentDataService.BoidSettings = await _saveLoadService.LoadBoidsSettings() 
+            _persistentDataService.BoidSettings = await _saveLoadService.LoadBoidsSettings()
                                                    ?? CreateNewBoidSettings();
-            _persistentDataService.PlayerState = await _saveLoadService.LoadPlayerState() 
+            _persistentDataService.PlayerState = await _saveLoadService.LoadPlayerState()
                                                  ?? CreateNewPlayerState();
         }
 
-        private PlayerStateData CreateNewPlayerState() => 
+        private PlayerStateData CreateNewPlayerState() =>
             new()
             {
                 PlayerPosition = Vector3.zero
@@ -52,7 +52,7 @@ namespace Content.Infrastructure.States
             new()
             {
                 BoidCount = 2250,
-                SpawnRadius = 40f,
+                SpawnRadius = 10f,
                 MinSpeed = 10f,
                 MaxSpeed = 12f,
                 PerceptionRadius = 4.5f,

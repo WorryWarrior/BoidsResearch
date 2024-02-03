@@ -1,4 +1,5 @@
-﻿using Content.Infrastructure.Services.PersistentData;
+﻿using Content.Boids.Jobs;
+using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;
@@ -21,6 +22,16 @@ namespace Content.Boids.Impl_Entitas.Systems
 
         public void Execute()
         {
+            if (_persistentDataService.BoidSettings.CollisionAvoidanceWeight == 0f)
+            {
+                foreach (GameEntity e in _boidsGroup)
+                {
+                    e.ReplaceIsOnCollisionTrajectory(false);
+                }
+
+                return;
+            }
+
             NativeArray<bool> _boidCollisionTrajectoryStatuses =
                 new NativeArray<bool>(_boidsGroup.count, Allocator.TempJob);
             NativeArray<float3> _boidPositions = new NativeArray<float3>(_boidsGroup.count, Allocator.TempJob);
@@ -37,11 +48,11 @@ namespace Content.Boids.Impl_Entitas.Systems
 
             CheckCollisionTrajectoryJob checkCollisionTrajectoryJob = new()
             {
-                boundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
-                collisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
-                boidPositions = _boidPositions,
-                boidRotations = _boidRotations,
-                collisionTrajectoryStatuses = _boidCollisionTrajectoryStatuses
+                BoundsRadius = _persistentDataService.BoidSettings.BoundsRadius,
+                CollisionAvoidanceDistance = _persistentDataService.BoidSettings.CollisionAvoidanceDistance,
+                BoidPositions = _boidPositions,
+                BoidRotations = _boidRotations,
+                CollisionTrajectoryStatuses = _boidCollisionTrajectoryStatuses
             };
 
             JobHandle jobHandle = checkCollisionTrajectoryJob.Schedule(_boidsGroup.count, 32);
