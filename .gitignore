@@ -13,6 +13,7 @@
 /[Aa]ssets/[Ll]ogs/
 /[Aa]ssets/[Ss]cripts/[Tt]emp/
 /[Aa]ssets/[Ee]ditorData/
+/[Aa]ssets/Content/Scripts/Test/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -62,3 +63,4 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/Content/Scripts/Test.meta

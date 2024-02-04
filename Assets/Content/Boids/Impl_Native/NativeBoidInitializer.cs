@@ -32,8 +32,7 @@ namespace Content.Boids.Impl_Native
 
         public async Task InitializeBoids()
         {
-            World world = World.DefaultGameObjectInjectionWorld;
-            EntityManager entityManager = world.EntityManager;
+            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
 
             NativeArray<float3> boidPositions = new NativeArray<float3>(
@@ -68,6 +67,13 @@ namespace Content.Boids.Impl_Native
             entityManager.DestroyEntity(boidPrototype);
         }
 
+        public void DestroyBoidEntities()
+        {
+            EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            EntityQuery boidQuery = entityManager.CreateEntityQuery(typeof(BoidParameterComponent));
+            entityManager.DestroyEntity(boidQuery);
+        }
+
         private async Task<Entity> CreateBoidPrototype(EntityManager entityManager)
         {
             Entity boidPrototype = entityManager.CreateEntity();
@@ -96,6 +102,7 @@ namespace Content.Boids.Impl_Native
 
             return boidPrototype;
         }
+
 
         private int[] CreateBoidIDs(int boidCount)
         {

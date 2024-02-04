@@ -3,7 +3,6 @@ using Content.Boids.Impl_Native.Components;
 using Content.Boids.Impl_Native.Aspects;
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
 
 namespace Content.Boids.Impl_Native.Systems
 {

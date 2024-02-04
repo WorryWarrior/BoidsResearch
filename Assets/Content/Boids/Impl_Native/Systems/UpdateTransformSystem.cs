@@ -25,15 +25,22 @@ namespace Content.Boids.Impl_Native.Systems
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            new UpdateTransformJob().ScheduleParallel(_boidQuery);
+            UpdateTransformJob updateTransformJob = new UpdateTransformJob
+            {
+                DeltaTime = SystemAPI.Time.DeltaTime
+            };
+            updateTransformJob.ScheduleParallel(_boidQuery);
         }
 
         [RequireMatchingQueriesForUpdate]
+        [StructLayout(LayoutKind.Auto)]
         private partial struct UpdateTransformJob : IJobEntity
         {
+            public float DeltaTime;
+
             private void Execute(ref LocalTransform transform, ref VelocityComponent velocity)
             {
-                transform.Position += velocity.Value;
+                transform.Position += velocity.Value * DeltaTime;
                 float3 dir = velocity.Value / math.length(velocity.Value);
                 transform.Rotation = quaternion.LookRotationSafe(dir, math.up());
             }

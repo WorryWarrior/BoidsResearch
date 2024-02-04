@@ -41,6 +41,7 @@ namespace Content.Boids.Impl_Native
 
         private void TearDownBoidsSimulation()
         {
+            _nativeBoidInitializer.DestroyBoidEntities();
         }
     }
 }

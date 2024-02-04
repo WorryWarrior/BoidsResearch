@@ -31,6 +31,7 @@ namespace Content.Boids.Impl_Native.Systems
             updateVelocityJob.ScheduleParallel(_boidQuery);
         }
 
+        [RequireMatchingQueriesForUpdate]
         [StructLayout(LayoutKind.Auto)]
         private partial struct UpdateVelocityJob : IJobEntity
         {
