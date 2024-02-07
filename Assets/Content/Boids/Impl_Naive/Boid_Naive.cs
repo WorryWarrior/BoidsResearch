@@ -1,4 +1,5 @@
-﻿using Content.Data;
+﻿using Content.Boids.Impl_Naive.MathUtility;
+using Content.Data;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -89,7 +90,7 @@ namespace Content.Boids.Impl_Naive
 
         private Vector3 ObstacleRays()
         {
-            Vector3[] rayDirections = BoidHelper.directions;
+            Vector3[] rayDirections = BoidHelper._directions;
 
             for (int i = 0; i < rayDirections.Length; i++)
             {

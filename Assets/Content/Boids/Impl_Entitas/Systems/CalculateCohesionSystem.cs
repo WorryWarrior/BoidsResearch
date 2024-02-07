@@ -1,4 +1,4 @@
-using Content.Boids.Jobs;
+using Content.Boids.Impl_Entitas.Jobs;
 using Content.Infrastructure.Services.PersistentData;
 using Entitas;
 using Unity.Collections;

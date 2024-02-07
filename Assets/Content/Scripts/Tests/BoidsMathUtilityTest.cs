@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using Content.Boids.Impl_Naive.MathUtility;
 using D_Framework;
 using NUnit.Framework;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Tests
+namespace Content.Scripts.Tests
 {
     public class BoidsMathUtilityTest
     {
@@ -13,19 +12,19 @@ namespace Tests
         private const int EQUIVALENCE_ITERATION_COUNT = 1000;
         private const float MIN_TEST_RANGE_VALUE = -10_000f;
         private const float MAX_TEST_RANGE_VALUE = 10_000f;
-        
-        private readonly D_Rng rng;
 
-        private float NextTestFloat => rng.RollRandomFloatInRange(MIN_TEST_RANGE_VALUE, MAX_TEST_RANGE_VALUE);
-        
+        private readonly D_Rng _rng;
+
+        private float NextTestFloat => _rng.RollRandomFloatInRange(MIN_TEST_RANGE_VALUE, MAX_TEST_RANGE_VALUE);
+
         public BoidsMathUtilityTest()
         {
             int seed = UnityEngine.Random.Range(0, int.MaxValue);
-            rng = new D_Rng(seed);
-            
+            _rng = new D_Rng(seed);
+
             Debug.Log($"Math utility test runner instance created with seed {seed}");
         }
-        
+
         [Test]
         [Repeat(EQUIVALENCE_ITERATION_COUNT)]
         public void GetClampedDirectionEquivalenceTest()
@@ -34,17 +33,17 @@ namespace Tests
             Vector3 velocity = new(NextTestFloat, NextTestFloat, NextTestFloat);
             float maxSpeed = NextTestFloat;
             float maxSteerForce = NextTestFloat;
-            
-            float3 mathematicsValue = BoidsMathUtility.GetClampedDirection(vector, velocity, 
+
+            float3 mathematicsValue = BoidsMathUtility.GetClampedDirection(vector, velocity,
                 maxSpeed, maxSteerForce);
             Vector3 mathValue = BoidHelper.SteerTowards(vector, velocity,
                 maxSpeed, maxSteerForce);
-            
+
             Assert.IsTrue(math.abs(mathematicsValue.x - mathValue.x) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(mathematicsValue.y - mathValue.y) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(mathematicsValue.z - mathValue.z) < TARGET_PRECISION);
         }
-        
+
         [Test]
         [Repeat(EQUIVALENCE_ITERATION_COUNT)]
         public void GetForwardDirectionEquivalenceTest()
@@ -56,9 +55,9 @@ namespace Tests
             parentGO.transform.forward = parentForwardDirection;
 
             float3 transformWorldVector = parentGO.transform.TransformVector(localDirectionVector);
-            float3 mathematicsWorldVector = math.mul(quaternion.LookRotationSafe(parentForwardDirection, math.up()), 
+            float3 mathematicsWorldVector = math.mul(quaternion.LookRotationSafe(parentForwardDirection, math.up()),
                 localDirectionVector);
-            
+
             Assert.IsTrue(math.abs(transformWorldVector.x - mathematicsWorldVector.x) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(transformWorldVector.y - mathematicsWorldVector.y) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(transformWorldVector.z - mathematicsWorldVector.z) < TARGET_PRECISION);
@@ -68,19 +67,17 @@ namespace Tests
         [Repeat(EQUIVALENCE_ITERATION_COUNT)]
         public void GetAvoidanceDirectionsEquivalenceTest()
         {
-            int avoidanceDirectionCount = 300;
-            
-            float3[] mathematicsValues = BoidsMathUtility.GetAvoidanceRayDirections(avoidanceDirectionCount);
-            Vector3[] mathValues = BoidHelper.directions;
+            float3[] mathematicsValues = BoidsMathUtility.GetAvoidanceRayDirections(BoidHelper.NUM_VIEW_DIRECTIONS);
+            Vector3[] mathValues = BoidHelper._directions;
 
-            for (int i = 0; i < avoidanceDirectionCount; i++)
+            for (int i = 0; i < BoidHelper.NUM_VIEW_DIRECTIONS; i++)
             {
                 Assert.IsTrue(math.abs(mathematicsValues[i].x - mathValues[i].x) < TARGET_PRECISION);
-                Assert.IsTrue(math.abs(mathematicsValues[i].x - mathValues[i].x) < TARGET_PRECISION);
-                Assert.IsTrue(math.abs(mathematicsValues[i].x - mathValues[i].x) < TARGET_PRECISION);
+                Assert.IsTrue(math.abs(mathematicsValues[i].y - mathValues[i].y) < TARGET_PRECISION);
+                Assert.IsTrue(math.abs(mathematicsValues[i].z - mathValues[i].z) < TARGET_PRECISION);
             }
         }
-        
+
         [Test]
         [Repeat(EQUIVALENCE_ITERATION_COUNT)]
         public void ClampMagnitudeEquivalenceTest()
@@ -92,12 +89,12 @@ namespace Tests
 
             float3 mathematicsValue = BoidsMathUtility.ClampMagnitude(new float3(x, y, z), targetMagnitude);
             Vector3 mathValue = Vector3.ClampMagnitude(new Vector3(x, y, z), targetMagnitude);
-            
+
             Assert.IsTrue(math.abs(mathematicsValue.x - mathValue.x) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(mathematicsValue.y - mathValue.y) < TARGET_PRECISION);
             Assert.IsTrue(math.abs(mathematicsValue.z - mathValue.z) < TARGET_PRECISION);
         }
-        
+
         [Test]
         public void GetClosestPointOnRayTest()
         {

@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-namespace Content.Boids.Jobs
+namespace Content.Boids.Impl_Entitas.Jobs
 {
     [BurstCompile]
     public struct CalculateRotationJob : IJobParallelFor

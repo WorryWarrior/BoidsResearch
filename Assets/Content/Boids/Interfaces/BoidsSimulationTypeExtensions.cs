@@ -8,8 +8,8 @@ namespace Content.Boids.Interfaces
         {
             return sceneName switch
             {
-                "PFB_EntitasSystemController" => BoidsSimulationType.Entitas,
-                "PFB_LeoEcsSystemController"      => BoidsSimulationType.LeoEcs,
+                "PFB_EntitasSystemController"    => BoidsSimulationType.Entitas,
+                "PFB_NativeEcsSystemController"  => BoidsSimulationType.NativeEcs,
                 "PFB_NaiveSystemController"      => BoidsSimulationType.Naive,
                 _           => throw new ArgumentOutOfRangeException(nameof(sceneName), sceneName, null)
             };
@@ -19,9 +19,9 @@ namespace Content.Boids.Interfaces
         {
             return sceneName switch
             {
-                BoidsSimulationType.Entitas => "PFB_EntitasSystemController",
-                BoidsSimulationType.LeoEcs      => "PFB_LeoEcsSystemController",
-                BoidsSimulationType.Naive => "PFB_NaiveSystemController",
+                BoidsSimulationType.Entitas    => "PFB_EntitasSystemController",
+                BoidsSimulationType.NativeEcs  => "PFB_NativeEcsSystemController",
+                BoidsSimulationType.Naive      => "PFB_NaiveSystemController",
                 _                   => throw new ArgumentOutOfRangeException(nameof(sceneName), sceneName, null)
             };
         }

@@ -12,12 +12,14 @@ namespace Content.Hub.Settings
         private const string CohesionSliderName = "Cohesion";
         private const string SeparationSliderName = "Separation";
         private const string CollisionAvoidanceSliderName = "Collision Avoidance";
+        private const string TargetWeightSliderName = "Target Weight";
 
         [Header("Settings Controls")]
         [SerializeField] private SettingsSlider alignmentSlider = null;
         [SerializeField] private SettingsSlider cohesionSlider = null;
         [SerializeField] private SettingsSlider separationSlider = null;
         [SerializeField] private SettingsSlider collisionAvoidanceSlider = null;
+        [SerializeField] private SettingsSlider targetWeightSlider = null;
 
         private BoidSettingsData _boidSettings;
         private BoidSettingsStaticData _boidSettingsStaticData;
@@ -54,6 +56,10 @@ namespace Content.Hub.Settings
                 _boidSettingsStaticData.BoidCollisionAvoidanceValues.y);
             collisionAvoidanceSlider.SetSliderValue(_boidSettings.CollisionAvoidanceWeight);
 
+            targetWeightSlider.SetMinMaxValues(_boidSettingsStaticData.BoidTargetWeightValues.x,
+                _boidSettingsStaticData.BoidTargetWeightValues.y);
+            targetWeightSlider.SetSliderValue(_boidSettings.TargetWeight);
+
             if (!_isInitialized)
             {
                 SubscribeAndInvokeControls();
@@ -68,11 +74,13 @@ namespace Content.Hub.Settings
             cohesionSlider.OnSliderValueChanged += SetCohesionWeight;
             separationSlider.OnSliderValueChanged += SetSeparationWeight;
             collisionAvoidanceSlider.OnSliderValueChanged += SetCollisionAvoidanceWeight;
+            targetWeightSlider.OnSliderValueChanged += SetTargetWeight;
 
             SetAlignmentWeight(alignmentSlider.GetSliderValue());
             SetCohesionWeight(cohesionSlider.GetSliderValue());
             SetSeparationWeight(separationSlider.GetSliderValue());
             SetCollisionAvoidanceWeight(collisionAvoidanceSlider.GetSliderValue());
+            SetTargetWeight(targetWeightSlider.GetSliderValue());
         }
 
         private void SetControlsNames()
@@ -81,6 +89,7 @@ namespace Content.Hub.Settings
             cohesionSlider.SetSliderName(CohesionSliderName);
             separationSlider.SetSliderName(SeparationSliderName);
             collisionAvoidanceSlider.SetSliderName(CollisionAvoidanceSliderName);
+            targetWeightSlider.SetSliderName(TargetWeightSliderName);
         }
 
         private void SetAlignmentWeight(float value) =>
@@ -91,6 +100,8 @@ namespace Content.Hub.Settings
             _boidSettings.SeparationWeight = value;
         private void SetCollisionAvoidanceWeight(float value) =>
             _boidSettings.CollisionAvoidanceWeight = value;
+        private void SetTargetWeight(float value) =>
+            _boidSettings.TargetWeight = value;
 
     }
 }

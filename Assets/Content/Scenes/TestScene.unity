@@ -260,54 +260,6 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
---- !u!1 &492400066
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 492400068}
-  - component: {fileID: 492400067}
-  m_Layer: 0
-  m_Name: GameObject_1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &492400067
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 492400066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41537c39d0154e4b9887ece20a9c1c44, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityCount: 10
-  meshes:
-  - {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
-  material: {fileID: 2100000, guid: 06eb9cf8853dd944a80e2f3bad526a20, type: 2}
---- !u!4 &492400068
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 492400066}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &660195499
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,11 +301,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 660195499}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1d9e5e1f4a445f989eb18e6e4ec7d8b, type: 3}
+  m_Script: {fileID: 11500000, guid: 84f3a2f046a241549bda1ba3e18ab513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Mat: {fileID: 2100000, guid: 06eb9cf8853dd944a80e2f3bad526a20, type: 2}
-  Meshh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  cubeMesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  sphereMesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  mat: {fileID: 2100000, guid: 06eb9cf8853dd944a80e2f3bad526a20, type: 2}
 --- !u!1 &1229909341
 GameObject:
   m_ObjectHideFlags: 0
@@ -479,4 +432,3 @@ SceneRoots:
   - {fileID: 29163592}
   - {fileID: 1229909343}
   - {fileID: 660195501}
-  - {fileID: 492400068}

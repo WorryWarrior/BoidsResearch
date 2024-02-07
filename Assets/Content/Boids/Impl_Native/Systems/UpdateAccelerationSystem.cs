@@ -34,7 +34,8 @@ namespace Content.Boids.Impl_Native.Systems
                 ref BoidMovementDataComponent movementData)
             {
                 acceleration.Value = movementData.FollowTargetContribution + movementData.AlignmentContribution +
-                                     movementData.CohesionContribution + movementData.SeparationContribution;
+                                     movementData.CohesionContribution + movementData.SeparationContribution +
+                                     movementData.AvoidanceContribution;
             }
         }
     }

@@ -53,23 +53,23 @@ namespace Content.Infrastructure.Services.StaticData
             new StageStaticData
             {
                 StageKey = "Stage_BoidsEntitas",
-                StageDescription = "Entitas Implementation",
+                StageDescription = "Entitas Impl",
                 StageTitle = "Entitas",
                 CameraSpawnPoint = new Vector3(25f, 0f, 10f),
                 BoidsSimulationType = BoidsSimulationType.Entitas,
             },
             new StageStaticData
             {
-                StageKey = "Stage_BoidsLeoEcs",
-                StageDescription = "LeoEcs Implementation",
-                StageTitle = "LeoEcs",
+                StageKey = "Stage_BoidsNativeEcs",
+                StageDescription = "Native Impl",
+                StageTitle = "Native",
                 CameraSpawnPoint = new Vector3(25f, 0f, 10f),
-                BoidsSimulationType = BoidsSimulationType.LeoEcs,
+                BoidsSimulationType = BoidsSimulationType.NativeEcs,
             },
             new StageStaticData
             {
                 StageKey = "Stage_BoidsNaive",
-                StageDescription = "Naive Implementation",
+                StageDescription = "Naive Impl",
                 StageTitle = "Naive",
                 CameraSpawnPoint = new Vector3(25f, 0f, 10f),
                 BoidsSimulationType = BoidsSimulationType.Naive,
@@ -84,8 +84,8 @@ namespace Content.Infrastructure.Services.StaticData
             BoidAlignmentWeightValues = new Vector2(0f, 10f),
             BoidCohesionWeightValues = new Vector2(0f, 10f),
             BoidSeparationWeightValues = new Vector2(0f, 10f),
-            BoidTargetWeightValues = new Vector2(0f, 10f),
-            BoidCollisionAvoidanceValues = new Vector2(0f, 30f)
+            BoidTargetWeightValues = new Vector2(0f, 5f),
+            BoidCollisionAvoidanceValues = new Vector2(0f, 100f)
         };
 
         #endregion

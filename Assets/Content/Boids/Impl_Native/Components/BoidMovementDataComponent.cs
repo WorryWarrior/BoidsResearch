@@ -10,5 +10,6 @@ namespace Content.Boids.Impl_Native.Components
         public float3 AlignmentContribution;
         public float3 CohesionContribution;
         public float3 SeparationContribution;
+        public float3 AvoidanceContribution;
     }
 }

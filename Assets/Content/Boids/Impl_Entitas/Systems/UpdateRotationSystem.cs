@@ -1,4 +1,4 @@
-﻿using Content.Boids.Jobs;
+﻿using Content.Boids.Impl_Entitas.Jobs;
 using Entitas;
 using Unity.Collections;
 using Unity.Jobs;

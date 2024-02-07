@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 27733406809889547}
   - component: {fileID: 1176975434878204924}
   m_Layer: 0
-  m_Name: StubSimulationController
+  m_Name: NativeSimulationController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

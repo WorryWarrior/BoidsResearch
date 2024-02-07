@@ -3,7 +3,7 @@
     public enum BoidsSimulationType
     {
         Entitas,
-        LeoEcs,
+        NativeEcs,
         Naive
     }
 }

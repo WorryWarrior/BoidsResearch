@@ -1,13 +1,16 @@
 ﻿using System.Threading.Tasks;
 using Content.Boids.Impl_Native.Components;
+using Content.Boids.Impl_Native.Systems;
 using Content.Infrastructure.Factories.Interfaces;
 using Content.Infrastructure.Services.PersistentData;
+using Content.Scripts.Test;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Entities.Graphics;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Physics;
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;
@@ -84,6 +87,8 @@ namespace Content.Boids.Impl_Native
             {
                 FollowTargetPosition = float3.zero,
             });
+            //entityManager.AddComponentData(boidPrototype, new DebugPhysicsComponent());
+            entityManager.AddSharedComponent(boidPrototype, new PhysicsWorldIndex());
 
             GameObject prototypeBoidGO = await _boidFactory.Create(Vector3.zero);
             //float3 prototypeScale = prototypeBoidGO.transform.localScale;
@@ -149,6 +154,15 @@ namespace Content.Boids.Impl_Native
                 Ecb.AddComponent(index, e, new VelocityComponent
                 {
                     Value = entityRotationEuler * (MinSpeed + MaxSpeed) * 0.5f
+                });
+                Ecb.AddComponent(index, e, new PhysicsCollider
+                {
+                    Value = Unity.Physics.BoxCollider.Create(new BoxGeometry
+                    {
+                        Center = float3.zero,
+                        Orientation = quaternion.identity,
+                        Size = new float3(.25f, .25f, .25f),
+                    }, CollisionFilter.Default)
                 });
             }
         }
